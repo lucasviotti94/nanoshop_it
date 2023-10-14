@@ -7,7 +7,7 @@ const { Cable } = Modelos;
 
 router.get("/", async (req, res) => {
   try {
-    const CablesDB = await Cable.findAll({});
+    let CablesDB = await Cable.findAll({});
 
     res.status(200).send(CablesDB);
   } catch (error) {

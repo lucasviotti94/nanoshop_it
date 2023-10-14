@@ -7,7 +7,7 @@ const { Auricular } = Modelos;
 
 router.get("/", async (req, res) => {
   try {
-    const auricularesDB = await Auricular.findAll({});
+    let auricularesDB = await Auricular.findAll({});
 
     res.status(200).send(auricularesDB);
   } catch (error) {

@@ -25,8 +25,8 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    nuevo: {
-      type: DataTypes.BOOLEAN,
+    estado: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     bateria: {

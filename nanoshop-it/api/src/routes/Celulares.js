@@ -3,31 +3,43 @@ const { Op, Modelos } = require("../db.js");
 
 const router = Router();
 
-const { Funda } = Modelos;
+const { Celular } = Modelos;
 
 router.get("/", async (req, res) => {
   try {
-    let fundasDB = await Funda.findAll({});
+    let celularesDB = await Celular.findAll({});
 
-    res.status(200).send(fundasDB);
+    res.status(200).send(celularesDB);
   } catch (error) {
     res.send("Error en la operacion: " + error.message);
   }
 });
 
 router.post("/", async (req, res, next) => {
-  const { marca, tipo, color, precio, informacion } = req.body;
+  const {
+    marca,
+    modelo,
+    almacenamiemto,
+    color,
+    estado,
+    bateria,
+    precio,
+    informacion,
+  } = req.body;
 
   try {
-    let fuenteNueva = await Funda.create({
+    let celularNuevo = await Celular.create({
       marca: marca,
-      tipo: tipo,
+      modelo: modelo,
+      almacenamiemto: almacenamiemto,
       color: color,
+      estado: estado,
+      bateria: bateria,
       precio: precio,
       informacion: informacion,
     });
 
-    res.status(200).send(fuenteNueva);
+    res.status(200).send(celularNuevo);
   } catch (error) {
     res.send("Error en la operacion: " + error.message).status(400);
   }

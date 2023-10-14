@@ -37,6 +37,10 @@ module.exports = (sequelize) => {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
+    estado: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     precio: {
       type: DataTypes.INTEGER,
       allowNull: false,

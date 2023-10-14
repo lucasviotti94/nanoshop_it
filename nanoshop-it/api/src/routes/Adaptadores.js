@@ -7,7 +7,7 @@ const { Adaptador } = Modelos;
 
 router.get("/", async (req, res) => {
   try {
-    const adaptadoresDB = await Adaptador.findAll({});
+    let adaptadoresDB = await Adaptador.findAll({});
 
     res.status(200).send(adaptadoresDB);
   } catch (error) {
