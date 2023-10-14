@@ -33,15 +33,11 @@ let capsEntries = entries.map((entry) => [
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-// En sequelize.models están todos los modelos importados, PopUp como propiedades
-// Para relacionarlos hacemos un destructuring
-
 const Modelos = sequelize.models;
 
 // Aca vendrian las relaciones
 
 module.exports = {
-  ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
   conn: sequelize,
   Modelos,
   Op, // para importart la conexión { conn } = require('./db.js');
