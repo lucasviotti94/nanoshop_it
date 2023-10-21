@@ -35,4 +35,37 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.put("/:id", async (req, res, next) => {
+  const { id, marca, modelo, ficha, largo, precio, color, informacion } =
+    req.body;
+
+  try {
+    const cable = await Cable.findOne({ where: { ID: id } });
+
+    if (marca) {
+      await cable.update({ marca: marca });
+    }
+    if (modelo) {
+      await cable.update({ modelo: modelo });
+    }
+    if (ficha) {
+      await cable.update({ ficha: ficha });
+    }
+    if (largo) {
+      await cable.update({ largo: largo });
+    }
+    if (precio) {
+      await cable.update({ precio: precio });
+    }
+    if (color) {
+      await cable.update({ color: color });
+    }
+    if (informacion) {
+      await cable.update({ informacion: informacion });
+    }
+  } catch (error) {
+    res.status(500).send("entro al catch");
+  }
+});
+
 module.exports = router;

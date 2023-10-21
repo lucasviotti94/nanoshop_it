@@ -36,4 +36,37 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.put("/:id", async (req, res, next) => {
+  const { id, marca, modelo, ficha, inalambrico, precio, color, informacion } =
+    req.body;
+
+  try {
+    const auricular = await Auricular.findOne({ where: { ID: id } });
+
+    if (marca) {
+      await auricular.update({ marca: marca });
+    }
+    if (modelo) {
+      await auricular.update({ modelo: modelo });
+    }
+    if (ficha) {
+      await auricular.update({ ficha: ficha });
+    }
+    if (inalambrico) {
+      await auricular.update({ inalambrico: inalambrico });
+    }
+    if (precio) {
+      await auricular.update({ precio: precio });
+    }
+    if (color) {
+      await auricular.update({ color: color });
+    }
+    if (informacion) {
+      await auricular.update({ informacion: informacion });
+    }
+  } catch (error) {
+    res.status(500).send("entro al catch");
+  }
+});
+
 module.exports = router;

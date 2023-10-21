@@ -34,4 +34,34 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.put("/:id", async (req, res, next) => {
+  const { id, marca, modelo, inalambrico, deAuto, precio, informacion } =
+    req.body;
+
+  try {
+    const cargador = await Cargador.findOne({ where: { ID: id } });
+
+    if (marca) {
+      await cargador.update({ marca: marca });
+    }
+    if (modelo) {
+      await cargador.update({ modelo: modelo });
+    }
+    if (inalambrico) {
+      await cargador.update({ inalambrico: inalambrico });
+    }
+    if (deAuto) {
+      await cargador.update({ deAuto: deAuto });
+    }
+    if (precio) {
+      await cargador.update({ precio: precio });
+    }
+    if (informacion) {
+      await cargador.update({ informacion: informacion });
+    }
+  } catch (error) {
+    res.status(500).send("entro al catch");
+  }
+});
+
 module.exports = router;
