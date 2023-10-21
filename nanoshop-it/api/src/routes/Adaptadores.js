@@ -33,4 +33,30 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.put("/:id", async (req, res, next) => {
+  const { id, marca, modelo, tipo, precio, informacion } = req.body;
+
+  try {
+    const adaptador = await Adaptador.findOne({ where: { ID: id } });
+
+    if (marca) {
+      await adaptador.update({ marca: marca });
+    }
+    if (modelo) {
+      await adaptador.update({ modelo: modelo });
+    }
+    if (tipo) {
+      await adaptador.update({ tipo: tipo });
+    }
+    if (precio) {
+      await adaptador.update({ precio: precio });
+    }
+    if (informacion) {
+      await adaptador.update({ informacion: informacion });
+    }
+  } catch (error) {
+    res.status(500).send("entro al catch");
+  }
+});
+
 module.exports = router;

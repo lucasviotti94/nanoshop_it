@@ -49,4 +49,57 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.put("/:id", async (req, res, next) => {
+  const {
+    id,
+    marca,
+    modelo,
+    memoria,
+    almacenamiemto,
+    pantalla,
+    color,
+    chip,
+    estado,
+    precio,
+    informacion,
+  } = req.body;
+
+  try {
+    const celular = await Celular.findOne({ where: { ID: id } });
+
+    if (marca) {
+      await celular.update({ marca: marca });
+    }
+    if (modelo) {
+      await celular.update({ modelo: modelo });
+    }
+    if (memoria) {
+      await celular.update({ memoria: memoria });
+    }
+    if (almacenamiemto) {
+      await celular.update({ almacenamiemto: almacenamiemto });
+    }
+    if (pantalla) {
+      await celular.update({ pantalla: pantalla });
+    }
+    if (color) {
+      await celular.update({ color: color });
+    }
+    if (chip) {
+      await celular.update({ chip: chip });
+    }
+    if (estado) {
+      await celular.update({ estado: estado });
+    }
+    if (precio) {
+      await celular.update({ precio: precio });
+    }
+    if (informacion) {
+      await celular.update({ informacion: informacion });
+    }
+  } catch (error) {
+    res.status(500).send("entro al catch");
+  }
+});
+
 module.exports = router;
