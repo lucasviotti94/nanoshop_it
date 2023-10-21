@@ -32,4 +32,28 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.put("/:id", async (req, res, next) => {
+  const { id, marca, color, precio, informacion } = req.body;
+
+  try {
+    const mallaByIdDB = await Malla.findOne({ where: { ID: id } });
+
+    if (marca) {
+      await mallaByIdDB.update({ marca: marca });
+    }
+    if (color) {
+      await mallaByIdDB.update({ color: color });
+    }
+    if (precio) {
+      await mallaByIdDB.update({ precio: precio });
+    }
+    if (informacion) {
+      await mallaByIdDB.update({ informacion: informacion });
+    }
+    res.status(200);
+  } catch (error) {
+    res.status(500).send("entro al catch");
+  }
+});
+
 module.exports = router;

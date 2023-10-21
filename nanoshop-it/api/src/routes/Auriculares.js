@@ -41,29 +41,30 @@ router.put("/:id", async (req, res, next) => {
     req.body;
 
   try {
-    const auricular = await Auricular.findOne({ where: { ID: id } });
+    const auricularByIdDB = await Auricular.findOne({ where: { ID: id } });
 
     if (marca) {
-      await auricular.update({ marca: marca });
+      await auricularByIdDB.update({ marca: marca });
     }
     if (modelo) {
-      await auricular.update({ modelo: modelo });
+      await auricularByIdDB.update({ modelo: modelo });
     }
     if (ficha) {
-      await auricular.update({ ficha: ficha });
+      await auricularByIdDB.update({ ficha: ficha });
     }
     if (inalambrico) {
-      await auricular.update({ inalambrico: inalambrico });
+      await auricularByIdDB.update({ inalambrico: inalambrico });
     }
     if (precio) {
-      await auricular.update({ precio: precio });
+      await auricularByIdDB.update({ precio: precio });
     }
     if (color) {
-      await auricular.update({ color: color });
+      await auricularByIdDB.update({ color: color });
     }
     if (informacion) {
-      await auricular.update({ informacion: informacion });
+      await auricularByIdDB.update({ informacion: informacion });
     }
+    res.status(200);
   } catch (error) {
     res.status(500).send("entro al catch");
   }

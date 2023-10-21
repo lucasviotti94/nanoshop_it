@@ -32,4 +32,28 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.put("/:id", async (req, res, next) => {
+  const { id, marca, tipo, precio, informacion } = req.body;
+
+  try {
+    const fuenteByIdDB = await Fuente.findOne({ where: { ID: id } });
+
+    if (marca) {
+      await fuenteByIdDB.update({ marca: marca });
+    }
+    if (tipo) {
+      await fuenteByIdDB.update({ tipo: tipo });
+    }
+    if (precio) {
+      await fuenteByIdDB.update({ precio: precio });
+    }
+    if (informacion) {
+      await fuenteByIdDB.update({ informacion: informacion });
+    }
+    res.status(200);
+  } catch (error) {
+    res.status(500).send("entro al catch");
+  }
+});
+
 module.exports = router;

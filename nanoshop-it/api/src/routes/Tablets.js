@@ -36,4 +36,46 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.put("/:id", async (req, res, next) => {
+  const {
+    id,
+    marca,
+    modelo,
+    color,
+    tamaño,
+    almacenamiento,
+    precio,
+    informacion,
+  } = req.body;
+
+  try {
+    const tabletByIdDB = await Tablet.findOne({ where: { ID: id } });
+
+    if (marca) {
+      await tabletByIdDB.update({ marca: marca });
+    }
+    if (modelo) {
+      await tabletByIdDB.update({ modelo: modelo });
+    }
+    if (color) {
+      await tabletByIdDB.update({ color: color });
+    }
+    if (tamaño) {
+      await tabletByIdDB.update({ tamaño: tamaño });
+    }
+    if (almacenamiento) {
+      await tabletByIdDB.update({ almacenamiento: almacenamiento });
+    }
+    if (precio) {
+      await tabletByIdDB.update({ precio: precio });
+    }
+    if (informacion) {
+      await tabletByIdDB.update({ informacion: informacion });
+    }
+    res.status(200);
+  } catch (error) {
+    res.status(500).send("entro al catch");
+  }
+});
+
 module.exports = router;

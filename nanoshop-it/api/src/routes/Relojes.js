@@ -33,4 +33,31 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.put("/:id", async (req, res, next) => {
+  const { id, marca, modelo, color, precio, informacion } = req.body;
+
+  try {
+    const relojByIdDB = await Reloj.findOne({ where: { ID: id } });
+
+    if (marca) {
+      await relojByIdDB.update({ marca: marca });
+    }
+    if (modelo) {
+      await relojByIdDB.update({ modelo: modelo });
+    }
+    if (color) {
+      await relojByIdDB.update({ color: color });
+    }
+    if (precio) {
+      await relojByIdDB.update({ precio: precio });
+    }
+    if (informacion) {
+      await relojByIdDB.update({ informacion: informacion });
+    }
+    res.status(200);
+  } catch (error) {
+    res.status(500).send("entro al catch");
+  }
+});
+
 module.exports = router;

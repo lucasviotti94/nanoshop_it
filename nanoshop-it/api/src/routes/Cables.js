@@ -40,29 +40,30 @@ router.put("/:id", async (req, res, next) => {
     req.body;
 
   try {
-    const cable = await Cable.findOne({ where: { ID: id } });
+    const cableByIdDB = await Cable.findOne({ where: { ID: id } });
 
     if (marca) {
-      await cable.update({ marca: marca });
+      await cableByIdDB.update({ marca: marca });
     }
     if (modelo) {
-      await cable.update({ modelo: modelo });
+      await cableByIdDB.update({ modelo: modelo });
     }
     if (ficha) {
-      await cable.update({ ficha: ficha });
+      await cableByIdDB.update({ ficha: ficha });
     }
     if (largo) {
-      await cable.update({ largo: largo });
+      await cableByIdDB.update({ largo: largo });
     }
     if (precio) {
-      await cable.update({ precio: precio });
+      await cableByIdDB.update({ precio: precio });
     }
     if (color) {
-      await cable.update({ color: color });
+      await cableByIdDB.update({ color: color });
     }
     if (informacion) {
-      await cable.update({ informacion: informacion });
+      await cableByIdDB.update({ informacion: informacion });
     }
+    res.status(200);
   } catch (error) {
     res.status(500).send("entro al catch");
   }

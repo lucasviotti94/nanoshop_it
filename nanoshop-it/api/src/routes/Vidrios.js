@@ -33,4 +33,31 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.put("/:id", async (req, res, next) => {
+  const { id, marca, modelo, color, precio, informacion } = req.body;
+
+  try {
+    const vidrioByIdDB = await Vidrio.findOne({ where: { ID: id } });
+
+    if (marca) {
+      await vidrioByIdDB.update({ marca: marca });
+    }
+    if (modelo) {
+      await vidrioByIdDB.update({ modelo: modelo });
+    }
+    if (color) {
+      await vidrioByIdDB.update({ color: color });
+    }
+    if (precio) {
+      await vidrioByIdDB.update({ precio: precio });
+    }
+    if (informacion) {
+      await vidrioByIdDB.update({ informacion: informacion });
+    }
+    res.status(200);
+  } catch (error) {
+    res.status(500).send("entro al catch");
+  }
+});
+
 module.exports = router;

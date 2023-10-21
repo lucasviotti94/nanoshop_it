@@ -59,32 +59,33 @@ router.put("/:id", async (req, res, next) => {
   } = req.body;
 
   try {
-    const celular = await Celular.findOne({ where: { ID: id } });
+    const celularByIdDB = await Celular.findOne({ where: { ID: id } });
 
     if (marca) {
-      await celular.update({ marca: marca });
+      await celularByIdDB.update({ marca: marca });
     }
     if (modelo) {
-      await celular.update({ modelo: modelo });
+      await celularByIdDB.update({ modelo: modelo });
     }
     if (almacenamiemto) {
-      await celular.update({ almacenamiemto: almacenamiemto });
+      await celularByIdDB.update({ almacenamiemto: almacenamiemto });
     }
     if (color) {
-      await celular.update({ color: color });
+      await celularByIdDB.update({ color: color });
     }
     if (estado) {
-      await celular.update({ estado: estado });
+      await celularByIdDB.update({ estado: estado });
     }
     if (bateria) {
-      await celular.update({ bateria: bateria });
+      await celularByIdDB.update({ bateria: bateria });
     }
     if (precio) {
-      await celular.update({ precio: precio });
+      await celularByIdDB.update({ precio: precio });
     }
     if (informacion) {
-      await celular.update({ informacion: informacion });
+      await celularByIdDB.update({ informacion: informacion });
     }
+    res.status(200);
   } catch (error) {
     res.status(500).send("entro al catch");
   }
