@@ -39,26 +39,27 @@ router.put("/:id", async (req, res, next) => {
     req.body;
 
   try {
-    const cargador = await Cargador.findOne({ where: { ID: id } });
+    const cargadorByIdDB = await Cargador.findOne({ where: { ID: id } });
 
     if (marca) {
-      await cargador.update({ marca: marca });
+      await cargadorByIdDB.update({ marca: marca });
     }
     if (modelo) {
-      await cargador.update({ modelo: modelo });
+      await cargadorByIdDB.update({ modelo: modelo });
     }
     if (inalambrico) {
-      await cargador.update({ inalambrico: inalambrico });
+      await cargadorByIdDB.update({ inalambrico: inalambrico });
     }
     if (deAuto) {
-      await cargador.update({ deAuto: deAuto });
+      await cargadorByIdDB.update({ deAuto: deAuto });
     }
     if (precio) {
-      await cargador.update({ precio: precio });
+      await cargadorByIdDB.update({ precio: precio });
     }
     if (informacion) {
-      await cargador.update({ informacion: informacion });
+      await cargadorByIdDB.update({ informacion: informacion });
     }
+    res.status(200);
   } catch (error) {
     res.status(500).send("entro al catch");
   }

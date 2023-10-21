@@ -33,4 +33,31 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.put("/:id", async (req, res, next) => {
+  const { id, marca, tipo, color, precio, informacion } = req.body;
+
+  try {
+    const fundaByIdDB = await Funda.findOne({ where: { ID: id } });
+
+    if (marca) {
+      await fundaByIdDB.update({ marca: marca });
+    }
+    if (tipo) {
+      await fundaByIdDB.update({ tipo: tipo });
+    }
+    if (color) {
+      await fundaByIdDB.update({ color: color });
+    }
+    if (precio) {
+      await fundaByIdDB.update({ precio: precio });
+    }
+    if (informacion) {
+      await fundaByIdDB.update({ informacion: informacion });
+    }
+    res.status(200);
+  } catch (error) {
+    res.status(500).send("entro al catch");
+  }
+});
+
 module.exports = router;
