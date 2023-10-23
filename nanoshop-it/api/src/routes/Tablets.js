@@ -15,6 +15,16 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const tabletByID = await Tablet.findOne({ where: { id: id } });
+    res.send(tabletByID).status(200);
+  } catch (error) {
+    res.send("Error en la operacion: " + error.message).status(500);
+  }
+});
+
 router.post("/", async (req, res, next) => {
   const { marca, modelo, color, tamaño, almacenamiento, precio, informacion } =
     req.body;
@@ -32,11 +42,11 @@ router.post("/", async (req, res, next) => {
 
     res.status(200).send(tabletNueva);
   } catch (error) {
-    res.send("Error en la operacion: " + error.message).status(400);
+    res.send("Error en la operacion: " + error.message).status(500);
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/", async (req, res, next) => {
   const {
     id,
     marca,
@@ -49,7 +59,7 @@ router.put("/:id", async (req, res, next) => {
   } = req.body;
 
   try {
-    const tabletByIdDB = await Tablet.findOne({ where: { ID: id } });
+    const tabletByIdDB = await Tablet.findOne({ where: { id: id } });
 
     if (marca) {
       await tabletByIdDB.update({ marca: marca });
@@ -74,7 +84,21 @@ router.put("/:id", async (req, res, next) => {
     }
     res.status(200);
   } catch (error) {
-    res.status(500).send("entro al catch");
+    res.send("Error en la operacion: " + error.message).status(500);
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Tablet.destroy({
+      where: {
+        id: id,
+      },
+    });
+    res.send("Tablet borrado de la base de datos.").status(200);
+  } catch (error) {
+    res.send("Error en la operacion: " + error.message).status(500);
   }
 });
 

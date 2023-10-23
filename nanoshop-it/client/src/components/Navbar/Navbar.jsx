@@ -1,57 +1,30 @@
 import * as React from 'react';
 import { Link } from "react-router-dom"
-
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-// import NavDropdown from 'react-bootstrap/NavDropdown';
-import "./NavBar.css"
+import SearchBar from '../SearchBar/SearchBar'
 
-import LogoNano from "../../images/nanopngR.png"
-
-// const links2Nav = {
-//   color: "white"
-// }
+import "./Navbar.css"
+import LogoNano from "../../images/NanoLogo.png"
 
 
 export default function NavBar () {
   
   return(
-    <div className='navBar'>
-      <Navbar expand="lg" className="bg-white">
-        <Container fluid>
-          <Navbar.Brand >
-            <img src={LogoNano} alt="LogoNano" className="Logo"/>
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="navbarScroll" />
-          <Navbar.Collapse id="navbarScroll" className="justify-content-end">
-            <Nav              
-              style={{ 
-                maxHeight: '100px',
-                fontSize: "20px",                
-                marginRight: "4%"
-              }}
-              navbarScroll
-            >
-              <Nav.Link as={Link} to={"/"} >Inicio</Nav.Link>
-              <Nav.Link as={Link} to={"/about"}>Nosotros</Nav.Link>
-              <Nav.Link as={Link} to={"/contact"}>Contacto</Nav.Link>
-            </Nav>
-            <Form className="d-flex">
-              <Form.Control
-                type="search"
-                placeholder="Search..."
-                className="me-2"
-                aria-label="Search"
-              />
-              <Button variant="outline-success">Search</Button>
-            </Form>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-      <Navbar expand="lg" className="bg-secondary">
+    <div className='navBar'>   
+      <div className='upNavbar'>
+        <img src={LogoNano} alt="LogoNano" className="Logo"/>
+        <div className='linksUN'>              
+          <ul>
+            <li as={Link} to={"/"}>Inicio</li>
+            <li as={Link} to={"/about"}>Nosotros</li>
+            <li as={Link} to={"/contact"}>Contacto</li>
+          </ul>
+        </div>
+        <div className='searchBar'>
+          <SearchBar/>
+        </div>   
+      </div>
+      <div className='downNavbar'>
         <Nav
           style={{            
             maxHeight: '200px',
@@ -67,8 +40,8 @@ export default function NavBar () {
           <Nav.Link to={"/"} style={{color: "white"}}>iPad</Nav.Link>
           <Nav.Link to={"/"} style={{color: "white"}}>Mac</Nav.Link>
           <Nav.Link to={"/"} style={{color: "white"}}>Watch</Nav.Link>
-        </Nav>    
-      </Navbar>    
+        </Nav>
+      </div>
     </div>
 
   )

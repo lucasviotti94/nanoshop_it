@@ -15,12 +15,23 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const fundaByID = await Funda.findOne({ where: { id: id } });
+    res.send(fundaByID).status(200);
+  } catch (error) {
+    res.send("Error en la operacion: " + error.message).status(500);
+  }
+});
+
 router.post("/", async (req, res, next) => {
-  const { marca, tipo, color, precio, informacion } = req.body;
+  const { marca, modelo, tipo, color, precio, informacion } = req.body;
 
   try {
     let fuenteNueva = await Funda.create({
       marca: marca,
+      modelo: modelo,
       tipo: tipo,
       color: color,
       precio: precio,
@@ -29,18 +40,21 @@ router.post("/", async (req, res, next) => {
 
     res.status(200).send(fuenteNueva);
   } catch (error) {
-    res.send("Error en la operacion: " + error.message).status(400);
+    res.send("Error en la operacion: " + error.message).status(500);
   }
 });
 
-router.put("/:id", async (req, res, next) => {
-  const { id, marca, tipo, color, precio, informacion } = req.body;
+router.put("/", async (req, res, next) => {
+  const { id, marca, modelo, tipo, color, precio, informacion } = req.body;
 
   try {
-    const fundaByIdDB = await Funda.findOne({ where: { ID: id } });
+    const fundaByIdDB = await Funda.findOne({ where: { id: id } });
 
     if (marca) {
       await fundaByIdDB.update({ marca: marca });
+    }
+    if (modelo) {
+      await fundaByIdDB.update({ modelo: modelo });
     }
     if (tipo) {
       await fundaByIdDB.update({ tipo: tipo });
@@ -56,7 +70,21 @@ router.put("/:id", async (req, res, next) => {
     }
     res.status(200);
   } catch (error) {
-    res.status(500).send("entro al catch");
+    res.send("Error en la operacion: " + error.message).status(500);
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Funda.destroy({
+      where: {
+        id: id,
+      },
+    });
+    res.send("Funda borrado de la base de datos.").status(200);
+  } catch (error) {
+    res.send("Error en la operacion: " + error.message).status(500);
   }
 });
 

@@ -11,7 +11,17 @@ router.get("/", async (req, res) => {
 
     res.status(200).send(CablesDB);
   } catch (error) {
-    res.send("Error en la operacion: " + error.message);
+    res.send("Error en la operacion: " + error.message).status(500);
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const cableByID = await Cable.findOne({ where: { id: id } });
+    res.send(cableByID).status(200);
+  } catch (error) {
+    res.send("Error en la operacion: " + error.message).status(500);
   }
 });
 
@@ -31,16 +41,16 @@ router.post("/", async (req, res, next) => {
 
     res.status(200).send(cableNuevo);
   } catch (error) {
-    res.send("Error en la operacion: " + error.message).status(400);
+    res.send("Error en la operacion: " + error.message).status(500);
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/", async (req, res, next) => {
   const { id, marca, modelo, ficha, largo, precio, color, informacion } =
     req.body;
 
   try {
-    const cableByIdDB = await Cable.findOne({ where: { ID: id } });
+    const cableByIdDB = await Cable.findOne({ where: { id: id } });
 
     if (marca) {
       await cableByIdDB.update({ marca: marca });
@@ -65,7 +75,21 @@ router.put("/:id", async (req, res, next) => {
     }
     res.status(200);
   } catch (error) {
-    res.status(500).send("entro al catch");
+    res.send("Error en la operacion: " + error.message).status(500);
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Cable.destroy({
+      where: {
+        id: id,
+      },
+    });
+    res.send("Cable borrado de la base de datos.").status(200);
+  } catch (error) {
+    res.send("Error en la operacion: " + error.message).status(500);
   }
 });
 

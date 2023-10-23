@@ -2,11 +2,16 @@ const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
   // defino el modelo
-  sequelize.define("Vidrio", {
+  sequelize.define("Vidrio_Protector", {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
+    },
+    producto: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: "Vidrio_Protector",
     },
     marca: {
       type: DataTypes.STRING,
@@ -28,10 +33,6 @@ module.exports = (sequelize) => {
     informacion: {
       type: DataTypes.TEXT,
       allowNull: true,
-    },
-    fecha: {
-      type: DataTypes.STRING,
-      defaultValue: DataTypes.NOW,
     },
   });
 };

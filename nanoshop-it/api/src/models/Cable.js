@@ -8,6 +8,11 @@ module.exports = (sequelize) => {
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
+    producto: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: "Cable",
+    },
     marca: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -22,7 +27,7 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     largo: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     precio: {
@@ -37,10 +42,6 @@ module.exports = (sequelize) => {
     informacion: {
       type: DataTypes.TEXT,
       allowNull: true,
-    },
-    fecha: {
-      type: DataTypes.INTEGER,
-      defaultValue: DataTypes.NOW,
     },
   });
 };

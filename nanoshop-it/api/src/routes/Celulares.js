@@ -15,11 +15,21 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const celularByID = await Celular.findOne({ where: { id: id } });
+    res.send(celularByID).status(200);
+  } catch (error) {
+    res.send("Error en la operacion: " + error.message).status(500);
+  }
+});
+
 router.post("/", async (req, res, next) => {
   const {
     marca,
     modelo,
-    almacenamiemto,
+    almacenamiento,
     color,
     estado,
     bateria,
@@ -31,7 +41,7 @@ router.post("/", async (req, res, next) => {
     let celularNuevo = await Celular.create({
       marca: marca,
       modelo: modelo,
-      almacenamiemto: almacenamiemto,
+      almacenamiento: almacenamiento,
       color: color,
       estado: estado,
       bateria: bateria,
@@ -41,16 +51,16 @@ router.post("/", async (req, res, next) => {
 
     res.status(200).send(celularNuevo);
   } catch (error) {
-    res.send("Error en la operacion: " + error.message).status(400);
+    res.send("Error en la operacion: " + error.message).status(500);
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/", async (req, res, next) => {
   const {
     id,
     marca,
     modelo,
-    almacenamiemto,
+    almacenamiento,
     color,
     estado,
     bateria,
@@ -59,7 +69,7 @@ router.put("/:id", async (req, res, next) => {
   } = req.body;
 
   try {
-    const celularByIdDB = await Celular.findOne({ where: { ID: id } });
+    const celularByIdDB = await Celular.findOne({ where: { id: id } });
 
     if (marca) {
       await celularByIdDB.update({ marca: marca });
@@ -67,8 +77,8 @@ router.put("/:id", async (req, res, next) => {
     if (modelo) {
       await celularByIdDB.update({ modelo: modelo });
     }
-    if (almacenamiemto) {
-      await celularByIdDB.update({ almacenamiemto: almacenamiemto });
+    if (almacenamiento) {
+      await celularByIdDB.update({ almacenamiento: almacenamiento });
     }
     if (color) {
       await celularByIdDB.update({ color: color });
@@ -87,7 +97,21 @@ router.put("/:id", async (req, res, next) => {
     }
     res.status(200);
   } catch (error) {
-    res.status(500).send("entro al catch");
+    res.send("Error en la operacion: " + error.message).status(500);
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Celular.destroy({
+      where: {
+        id: id,
+      },
+    });
+    res.send("Celular borrado de la base de datos.").status(200);
+  } catch (error) {
+    res.send("Error en la operacion: " + error.message).status(500);
   }
 });
 

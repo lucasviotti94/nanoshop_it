@@ -8,6 +8,11 @@ module.exports = (sequelize) => {
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
+    producto: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: "Celular",
+    },
     marca: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -17,7 +22,7 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    almacenamiemto: {
+    almacenamiento: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -40,10 +45,6 @@ module.exports = (sequelize) => {
     informacion: {
       type: DataTypes.TEXT,
       allowNull: true,
-    },
-    fecha: {
-      type: DataTypes.STRING,
-      defaultValue: DataTypes.NOW,
     },
   });
 };
