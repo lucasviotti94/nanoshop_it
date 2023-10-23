@@ -15,6 +15,16 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const relojByID = await Reloj.findOne({ where: { id: id } });
+    res.send(relojByID).status(200);
+  } catch (error) {
+    res.send("Error en la operacion: " + error.message).status(500);
+  }
+});
+
 router.post("/", async (req, res, next) => {
   const { marca, modelo, color, precio, informacion } = req.body;
 
@@ -29,15 +39,15 @@ router.post("/", async (req, res, next) => {
 
     res.status(200).send(relojNuevo);
   } catch (error) {
-    res.send("Error en la operacion: " + error.message).status(400);
+    res.send("Error en la operacion: " + error.message).status(500);
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/", async (req, res, next) => {
   const { id, marca, modelo, color, precio, informacion } = req.body;
 
   try {
-    const relojByIdDB = await Reloj.findOne({ where: { ID: id } });
+    const relojByIdDB = await Reloj.findOne({ where: { id: id } });
 
     if (marca) {
       await relojByIdDB.update({ marca: marca });
@@ -56,7 +66,21 @@ router.put("/:id", async (req, res, next) => {
     }
     res.status(200);
   } catch (error) {
-    res.status(500).send("entro al catch");
+    res.send("Error en la operacion: " + error.message).status(500);
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Reloj.destroy({
+      where: {
+        id: id,
+      },
+    });
+    res.send("Reloj borrado de la base de datos.").status(200);
+  } catch (error) {
+    res.send("Error en la operacion: " + error.message).status(500);
   }
 });
 

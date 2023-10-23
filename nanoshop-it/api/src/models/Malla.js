@@ -8,10 +8,19 @@ module.exports = (sequelize) => {
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
+    producto: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: "Cable",
+    },
     marca: {
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: "Apple",
+    },
+    modelo: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     color: {
       type: DataTypes.STRING,
@@ -24,10 +33,6 @@ module.exports = (sequelize) => {
     informacion: {
       type: DataTypes.TEXT,
       allowNull: true,
-    },
-    fecha: {
-      type: DataTypes.STRING,
-      defaultValue: DataTypes.NOW,
     },
   });
 };

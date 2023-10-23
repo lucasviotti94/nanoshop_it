@@ -3,11 +3,11 @@ const { Op, Modelos } = require("../db.js");
 
 const router = Router();
 
-const { Vidrio } = Modelos;
+const { Vidrio_Protector } = Modelos;
 
 router.get("/", async (req, res) => {
   try {
-    let vidriosDB = await Vidrio.findAll({});
+    let vidriosDB = await Vidrio_Protector.findAll({});
 
     res.status(200).send(vidriosDB);
   } catch (error) {
@@ -15,11 +15,23 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const vidrioProtectorByID = await Vidrio_Protector.findOne({
+      where: { id: id },
+    });
+    res.send(vidrioProtectorByID).status(200);
+  } catch (error) {
+    res.send("Error en la operacion: " + error.message).status(500);
+  }
+});
+
 router.post("/", async (req, res, next) => {
   const { marca, modelo, color, precio, informacion } = req.body;
 
   try {
-    let vidrioNuevo = await Vidrio.create({
+    let vidrioNuevo = await Vidrio_Protector.create({
       marca: marca,
       modelo: modelo,
       color: color,
@@ -29,16 +41,14 @@ router.post("/", async (req, res, next) => {
 
     res.status(200).send(vidrioNuevo);
   } catch (error) {
-    res.send("Error en la operacion: " + error.message).status(400);
+    res.send("Error en la operacion: " + error.message).status(500);
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/", async (req, res, next) => {
   const { id, marca, modelo, color, precio, informacion } = req.body;
-
   try {
-    const vidrioByIdDB = await Vidrio.findOne({ where: { ID: id } });
-
+    const vidrioByIdDB = await Vidrio_Protector.findOne({ where: { id: id } });
     if (marca) {
       await vidrioByIdDB.update({ marca: marca });
     }
@@ -56,7 +66,21 @@ router.put("/:id", async (req, res, next) => {
     }
     res.status(200);
   } catch (error) {
-    res.status(500).send("entro al catch");
+    res.send("Error en la operacion: " + error.message).status(500);
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Vidrio_Protector.destroy({
+      where: {
+        id: id,
+      },
+    });
+    res.send("Vidrio borrado de la base de datos.").status(200);
+  } catch (error) {
+    res.send("Error en la operacion: " + error.message).status(500);
   }
 });
 

@@ -11,7 +11,8 @@ const modelFunda = require("./Fundas.js");
 const modelMalla = require("./Mallas.js");
 const modelReloj = require("./Relojes.js");
 const modelTablet = require("./Tablets.js");
-const modelVidrio = require("./Vidrios.js");
+const modelVidrio = require("./Vidrios_Protectores.js");
+const modelProductos = require("./Productos.js");
 
 const router = Router();
 
@@ -26,6 +27,7 @@ router.use("/fundas", modelFunda);
 router.use("/mallas", modelMalla);
 router.use("/relojes", modelReloj);
 router.use("/tablets", modelTablet);
-router.use("/vidrios", modelVidrio);
+router.use("/vidrios_protectores", modelVidrio);
+router.use("/productos", modelProductos);
 
 module.exports = router;
