@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Link } from "react-router-dom"
 import Nav from 'react-bootstrap/Nav';
 import SearchBar from '../SearchBar/SearchBar'
-import "./Navbar.css"
 
+import "./Navbar.css"
 import LogoNano from "../../images/NanoLogo.png"
 
 
@@ -43,5 +43,6 @@ export default function NavBar () {
         </Nav>
       </div>
     </div>
+
   )
 }
