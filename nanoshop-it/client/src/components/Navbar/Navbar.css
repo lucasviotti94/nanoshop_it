@@ -1,15 +1,81 @@
-.Logo{
-    width: 130px;
-    margin-left: 40%;
-    margin-top: 8%;
-  }
-  
-  .navBar{
-    position: sticky;
-    top: 0;   
-  }
+.navBar{
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;   
+  font-family: 'San Francisco', Arial, sans-serif;
+  letter-spacing: 1px;
+  font-weight:300px;
+}
 
-  .upNavbar{
+.upNavbar{
+  display: flex; 
+  align-items: center;              /* Centra verticalmente */
+  border: 1px solid #ccc;         /* Solo para visualización */
+  background-color: white;
+  height: 10vh;
+}
 
-  }
+.divLogo{
+  margin-left: 4.5vh;
+  flex-grow: 1;
+}
+
+.divLogo img{
+  width: 10vh;  
+}
+
+.uldivUp{
+  margin: 3vh;
+}
+
+.ulU {
+  display: flex;
+  align-items: center;
+  margin-right: 5vh;
+  flex-shrink: 0; /* Impide que los divs se reduzcan en tamaño */
+}
+
+.linksUp{
+  display: inline;
+  font-size: 1.8vh;
+  padding: 4%;
+  color: black;
+  text-decoration: none;
+}
+
+.linksUp:hover {
+  cursor: pointer;
+  color: gray;
+}
+
+.searchBarDiv{     
+  flex-shrink: 0; /* Impide que los divs se reduzcan en tamaño */
+  margin-left: 10px;
+}
+
+.downNavbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  background-color: gray;
+}
+
+.ulDivDown {
+
+}
+
+.linksDown{
+  cursor: pointer;
+  list-style-type: none;
+  margin: 3vh;
+  font-size: 2vh;
+  color: white;
+  text-decoration: none;
+}
+
+.linksDown:hover {
+  color: black;
+}
   
