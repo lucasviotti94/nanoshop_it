@@ -18,6 +18,7 @@ import {
   GET_FUNDA_BY_ID,
   GET_MALLAS_ALL,
   GET_MALLA_BY_ID,
+  GET_MODELOS,
   GET_RELOJES_ALL,
   GET_RELOJ_BY_ID,
   GET_TABLETS_ALL,
@@ -41,6 +42,7 @@ const initialState = {
   tablets: [],
   vidrios: [],
   conjuntos: [],
+  modelos: [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -139,6 +141,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         mallas: action.payload,
+      };
+    case GET_MODELOS:
+      return {
+        ...state,
+        modelos: action.payload,
       };
     case GET_RELOJES_ALL:
       return {

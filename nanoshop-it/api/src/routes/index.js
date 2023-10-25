@@ -13,6 +13,7 @@ const modelReloj = require("./Relojes.js");
 const modelTablet = require("./Tablets.js");
 const modelVidrio = require("./Vidrios_Protectores.js");
 const modelProductos = require("./Productos.js");
+const modelModelos = require("./Modelos.js");
 
 const router = Router();
 
@@ -29,5 +30,6 @@ router.use("/productos/relojes", modelReloj);
 router.use("/productos/tablets", modelTablet);
 router.use("/productos/vidrios_protectores", modelVidrio);
 router.use("/productos", modelProductos);
+router.use("/productos/modelos", modelModelos);
 
 module.exports = router;

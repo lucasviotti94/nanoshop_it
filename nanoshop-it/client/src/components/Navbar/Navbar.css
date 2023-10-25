@@ -10,14 +10,15 @@
 
 .upNavbar{
   display: flex; 
-  align-items: center;              /* Centra verticalmente */
-  border: 1px solid #ccc;         /* Solo para visualización */
+  align-items: center;         
+  border: 1px solid #ccc;      
   background-color: white;
   height: 10vh;
+
 }
 
 .divLogo{
-  margin-left: 4.5vh;
+  margin-left: 6vh;
   flex-grow: 1;
 }
 
@@ -26,7 +27,8 @@
 }
 
 .uldivUp{
-  margin: 3vh;
+  margin-right: 6vh;
+  margin-top: 1.5vh;
 }
 
 .ulU {
@@ -55,27 +57,58 @@
 }
 
 .downNavbar {
+  height: 6vh;
+  background-color: black;
   display: flex;
-  align-items: center;
+  flex-direction: row;
   justify-content: center;
-  height: 50px;
-  background-color: gray;
+  align-items: center;
 }
 
-.ulDivDown {
-
+.dropDown {
+  position: relative;
+  margin: 2vh;
 }
 
-.linksDown{
-  cursor: pointer;
-  list-style-type: none;
-  margin: 3vh;
-  font-size: 2vh;
-  color: white;
-  text-decoration: none;
-}
-
-.linksDown:hover {
+.dropDown > .link:focus,
+.link:hover {
   color: black;
 }
-  
+
+.dropDown-menuOFF {
+  position: absolute;
+  top: calc(100% + .25rem);  
+  /* margin-top: 5vh; */
+  padding: .75rem;
+  border-radius: .25rem;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.1);
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 150ms ease-in-out transform 150ms ease-in-out;
+  pointer-events: none;
+}
+
+
+.dropDown-menuON {
+position: absolute;
+top: calc(100% + .25rem);  
+background-color: aqua;
+padding: .75rem;
+border-radius: .25rem;
+box-shadow: 0 2px 5px 0 rgba(0,0,0,.1);
+opacity: 1;
+transform: translateY(0);
+pointer-events: auto;
+}
+
+.linksDown{  
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  /* margin-left: 0.4vh; */
+  font-size: 2vh;
+  color: white;
+  background-color: black;
+  width: 14vh;
+  /* height: 3.5vh; */
+}

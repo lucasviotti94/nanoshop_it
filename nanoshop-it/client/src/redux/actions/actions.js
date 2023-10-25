@@ -20,6 +20,7 @@ import {
   GET_FUNDA_BY_ID,
   GET_MALLAS_ALL,
   GET_MALLA_BY_ID,
+  GET_MODELOS,
   GET_RELOJES_ALL,
   GET_RELOJ_BY_ID,
   GET_TABLETS_ALL,
@@ -36,6 +37,20 @@ export function getProductsAll(query, search) {
         dispatch({
           type: GET_PRODUCTOS,
           payload: a.data,
+        });
+      })
+      .catch((err) => {});
+  };
+}
+
+export function getModelosAll(query, search) {
+  return function (dispatch) {
+    axios
+      .get("http://localhost:3000/modelos")
+      .then((m) => {
+        dispatch({
+          type: GET_MODELOS,
+          payload: m.data,
         });
       })
       .catch((err) => {});
