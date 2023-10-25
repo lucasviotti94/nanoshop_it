@@ -12,15 +12,10 @@ import {
     getFuentesAll, 
     getFundasAll, 
     getMallasAll, 
-    getRelojesAll, 
+    getRelojesAll,
     getTabletsAll,
     getVidriosProtectoresAll
-} from '../../redux/actions'
-
-// import Button from 'react-bootstrap/Button';
-// import Form from 'react-bootstrap/Form';
-
-// import s from "./SearchBar.css";
+} from '../../redux/actions/actions'
 
 export default function SearchBar() {
   const [input, setInput] = useState("");

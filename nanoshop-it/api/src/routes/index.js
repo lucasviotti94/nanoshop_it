@@ -13,21 +13,23 @@ const modelReloj = require("./Relojes.js");
 const modelTablet = require("./Tablets.js");
 const modelVidrio = require("./Vidrios_Protectores.js");
 const modelProductos = require("./Productos.js");
+const modelModelos = require("./Modelos.js");
 
 const router = Router();
 
-router.use("/adaptadores", modelAdaptador);
-router.use("/auriculares", modelAuricular);
-router.use("/cables", modelCable);
-router.use("/cargadores", modelCargador);
-router.use("/celulares", modelCelular);
-router.use("/computadoras", modelComputadora);
-router.use("/fuentes", modelFuente);
-router.use("/fundas", modelFunda);
-router.use("/mallas", modelMalla);
-router.use("/relojes", modelReloj);
-router.use("/tablets", modelTablet);
-router.use("/vidrios_protectores", modelVidrio);
+router.use("/productos/adaptadores", modelAdaptador);
+router.use("/productos/auriculares", modelAuricular);
+router.use("/productos/cables", modelCable);
+router.use("/productos/cargadores", modelCargador);
+router.use("/productos/celulares", modelCelular);
+router.use("/productos/computadoras", modelComputadora);
+router.use("/productos/fuentes", modelFuente);
+router.use("/productos/fundas", modelFunda);
+router.use("/productos/mallas", modelMalla);
+router.use("/productos/relojes", modelReloj);
+router.use("/productos/tablets", modelTablet);
+router.use("/productos/vidrios_protectores", modelVidrio);
 router.use("/productos", modelProductos);
+router.use("/productos/modelos", modelModelos);
 
 module.exports = router;

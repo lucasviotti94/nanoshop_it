@@ -1,15 +1,114 @@
-.Logo{
-    width: 130px;
-    margin-left: 40%;
-    margin-top: 8%;
-  }
-  
-  .navBar{
-    position: sticky;
-    top: 0;   
-  }
+.navBar{
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;   
+  font-family: 'San Francisco', Arial, sans-serif;
+  letter-spacing: 1px;
+  font-weight:300px;
+}
 
-  .upNavbar{
+.upNavbar{
+  display: flex; 
+  align-items: center;         
+  border: 1px solid #ccc;      
+  background-color: white;
+  height: 10vh;
 
-  }
-  
+}
+
+.divLogo{
+  margin-left: 6vh;
+  flex-grow: 1;
+}
+
+.divLogo img{
+  width: 10vh;  
+}
+
+.uldivUp{
+  margin-right: 6vh;
+  margin-top: 1.5vh;
+}
+
+.ulU {
+  display: flex;
+  align-items: center;
+  margin-right: 5vh;
+  flex-shrink: 0; /* Impide que los divs se reduzcan en tamaño */
+}
+
+.linksUp{
+  display: inline;
+  font-size: 1.8vh;
+  padding: 4%;
+  color: black;
+  text-decoration: none;
+}
+
+.linksUp:hover {
+  cursor: pointer;
+  color: gray;
+}
+
+.searchBarDiv{     
+  flex-shrink: 0; /* Impide que los divs se reduzcan en tamaño */
+  margin-left: 10px;
+}
+
+.downNavbar {
+  height: 6vh;
+  background-color: black;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.dropDown {
+  position: relative;
+  margin: 2vh;
+}
+
+.dropDown > .link:focus,
+.link:hover {
+  color: black;
+}
+
+.dropDown-menuOFF {
+  position: absolute;
+  top: calc(100% + .25rem);  
+  /* margin-top: 5vh; */
+  padding: .75rem;
+  border-radius: .25rem;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.1);
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 150ms ease-in-out transform 150ms ease-in-out;
+  pointer-events: none;
+}
+
+
+.dropDown-menuON {
+position: absolute;
+top: calc(100% + .25rem);  
+background-color: aqua;
+padding: .75rem;
+border-radius: .25rem;
+box-shadow: 0 2px 5px 0 rgba(0,0,0,.1);
+opacity: 1;
+transform: translateY(0);
+pointer-events: auto;
+}
+
+.linksDown{  
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  /* margin-left: 0.4vh; */
+  font-size: 2vh;
+  color: white;
+  background-color: black;
+  width: 14vh;
+  /* height: 3.5vh; */
+}

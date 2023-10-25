@@ -17,6 +17,7 @@ export const GET_FUNDAS_ALL = "GET_FUNDAS_ALL";
 export const GET_FUNDA_BY_ID = "GET_FUNDA_BY_ID";
 export const GET_MALLAS_ALL = "GET_MALLAS_ALL";
 export const GET_MALLA_BY_ID = "GET_MALLA_BY_ID";
+export const GET_MODELOS = "GET_MODELOS";
 export const GET_RELOJES_ALL = "GET_RELOJES_ALL";
 export const GET_RELOJ_BY_ID = "GET_RELOJ_BY_ID";
 export const GET_TABLETS_ALL = "GET_TABLETS_ALL";
