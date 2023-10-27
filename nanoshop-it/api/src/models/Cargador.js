@@ -24,14 +24,17 @@ module.exports = (sequelize) => {
     },
     inalambrico: {
       type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+    deAuto: {
+      type: DataTypes.BOOLEAN, //Si es para cargador para autos
       allowNull: true,
       defaultValue: false,
     },
-    deAuto: {
-      //Si es para cargador para autos
-      type: DataTypes.BOOLEAN,
+    estado: {
+      type: DataTypes.STRING,
       allowNull: true,
-      defaultValue: false,
+      defaultValue: "Nuevo",
     },
     precio: {
       type: DataTypes.INTEGER,
@@ -39,6 +42,10 @@ module.exports = (sequelize) => {
     },
     informacion: {
       type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    favorito: {
+      type: DataTypes.BOOLEAN,
       allowNull: true,
     },
   });

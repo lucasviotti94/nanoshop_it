@@ -26,7 +26,8 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const { marca, modelo, ficha, largo, precio, color, informacion } = req.body;
+  const { marca, modelo, ficha, largo, precio, estado, color, informacion } =
+    req.body;
 
   try {
     let cableNuevo = await Cable.create({
@@ -34,8 +35,9 @@ router.post("/", async (req, res, next) => {
       modelo: modelo,
       ficha: ficha,
       largo: largo,
-      precio: precio,
       color: color,
+      estado: estado,
+      precio: precio,
       informacion: informacion,
     });
 
@@ -46,8 +48,17 @@ router.post("/", async (req, res, next) => {
 });
 
 router.put("/", async (req, res, next) => {
-  const { id, marca, modelo, ficha, largo, precio, color, informacion } =
-    req.body;
+  const {
+    id,
+    marca,
+    modelo,
+    ficha,
+    largo,
+    precio,
+    estado,
+    color,
+    informacion,
+  } = req.body;
 
   try {
     const cableByIdDB = await Cable.findOne({ where: { id: id } });
@@ -64,11 +75,14 @@ router.put("/", async (req, res, next) => {
     if (largo) {
       await cableByIdDB.update({ largo: largo });
     }
-    if (precio) {
-      await cableByIdDB.update({ precio: precio });
-    }
     if (color) {
       await cableByIdDB.update({ color: color });
+    }
+    if (estado) {
+      await cableByIdDB.update({ estado: estado });
+    }
+    if (precio) {
+      await cableByIdDB.update({ precio: precio });
     }
     if (informacion) {
       await cableByIdDB.update({ informacion: informacion });

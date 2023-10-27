@@ -44,8 +44,16 @@ router.post("/", async (req, res, next) => {
 });
 
 router.put("/", async (req, res, next) => {
-  const { id, marca, modelo, inalambrico, deAuto, precio, informacion } =
-    req.body;
+  const {
+    id,
+    marca,
+    modelo,
+    inalambrico,
+    deAuto,
+    estado,
+    precio,
+    informacion,
+  } = req.body;
 
   try {
     const cargadorByIdDB = await Cargador.findOne({ where: { id: id } });
@@ -61,6 +69,9 @@ router.put("/", async (req, res, next) => {
     }
     if (deAuto) {
       await cargadorByIdDB.update({ deAuto: deAuto });
+    }
+    if (estado) {
+      await cargadorByIdDB.update({ estado: estado });
     }
     if (precio) {
       await cargadorByIdDB.update({ precio: precio });

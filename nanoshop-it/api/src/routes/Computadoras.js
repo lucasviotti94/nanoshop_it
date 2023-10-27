@@ -30,7 +30,7 @@ router.post("/", async (req, res, next) => {
     marca,
     modelo,
     memoria,
-    almacenamiemto,
+    almacenamiento,
     pantalla,
     color,
     chip,
@@ -44,7 +44,7 @@ router.post("/", async (req, res, next) => {
       marca: marca,
       modelo: modelo,
       memoria: memoria,
-      almacenamiemto: almacenamiemto,
+      almacenamiento: almacenamiento,
       pantalla: pantalla,
       color: color,
       chip: chip,
@@ -65,7 +65,7 @@ router.put("/", async (req, res, next) => {
     marca,
     modelo,
     memoria,
-    almacenamiemto,
+    almacenamiento,
     pantalla,
     color,
     chip,
@@ -86,8 +86,8 @@ router.put("/", async (req, res, next) => {
     if (memoria) {
       await computadoraByIdDB.update({ memoria: memoria });
     }
-    if (almacenamiemto) {
-      await computadoraByIdDB.update({ almacenamiemto: almacenamiemto });
+    if (almacenamiento) {
+      await computadoraByIdDB.update({ almacenamiento: almacenamiento });
     }
     if (pantalla) {
       await computadoraByIdDB.update({ pantalla: pantalla });

@@ -26,16 +26,23 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const { marca, modelo, color, tamaño, almacenamiento, precio, informacion } =
-    req.body;
+  const {
+    marca,
+    modelo,
+    color,
+    pantalla,
+    almacenamiento,
+    precio,
+    informacion,
+  } = req.body;
 
   try {
     let tabletNueva = await Tablet.create({
       marca: marca,
       modelo: modelo,
       color: color,
-      tamaño: tamaño,
       almacenamiento: almacenamiento,
+      pantalla: pantalla,
       precio: precio,
       informacion: informacion,
     });

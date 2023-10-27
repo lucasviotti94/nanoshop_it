@@ -30,5 +30,9 @@ module.exports = (sequelize) => {
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    favorito: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
   });
 };

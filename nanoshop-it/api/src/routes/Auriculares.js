@@ -26,8 +26,16 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const { marca, modelo, ficha, inalambrico, precio, color, informacion } =
-    req.body;
+  const {
+    marca,
+    modelo,
+    ficha,
+    inalambrico,
+    precio,
+    estado,
+    color,
+    informacion,
+  } = req.body;
 
   try {
     let auricularNuevo = await Auricular.create({
@@ -35,8 +43,9 @@ router.post("/", async (req, res, next) => {
       modelo: modelo,
       ficha: ficha,
       inalambrico: inalambrico,
-      precio: precio,
       color: color,
+      estado: estado,
+      precio: precio,
       informacion: informacion,
     });
 
@@ -47,8 +56,17 @@ router.post("/", async (req, res, next) => {
 });
 
 router.put("/", async (req, res, next) => {
-  const { id, marca, modelo, ficha, inalambrico, precio, color, informacion } =
-    req.body;
+  const {
+    id,
+    marca,
+    modelo,
+    ficha,
+    inalambrico,
+    precio,
+    estado,
+    color,
+    informacion,
+  } = req.body;
 
   try {
     const auricularByIdDB = await Auricular.findOne({ where: { id: id } });
@@ -65,11 +83,14 @@ router.put("/", async (req, res, next) => {
     if (inalambrico) {
       await auricularByIdDB.update({ inalambrico: inalambrico });
     }
-    if (precio) {
-      await auricularByIdDB.update({ precio: precio });
-    }
     if (color) {
       await auricularByIdDB.update({ color: color });
+    }
+    if (estado) {
+      await auricularByIdDB.update({ estado: estado });
+    }
+    if (precio) {
+      await auricularByIdDB.update({ precio: precio });
     }
     if (informacion) {
       await auricularByIdDB.update({ informacion: informacion });

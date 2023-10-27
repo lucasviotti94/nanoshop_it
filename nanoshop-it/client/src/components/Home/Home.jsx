@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
-// import { getProductsAll } from '../../redux/actions';
 import { useSelector, useDispatch } from 'react-redux';
+import { getProductsAll } from '../../redux/actions/actions';
 
 import "./Home.css";
-import { getProductsAll } from '../../redux/actions/actions';
 
 export default function Home() {
     

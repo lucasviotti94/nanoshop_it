@@ -15,8 +15,8 @@ module.exports = (sequelize) => {
     },
     marca: {
       type: DataTypes.STRING,
-      allowNull: false,
-      defaultValue: "Iphone",
+      allowNull: true,
+      defaultValue: "Apple",
     },
     modelo: {
       type: DataTypes.STRING,
@@ -32,7 +32,8 @@ module.exports = (sequelize) => {
     },
     estado: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
+      defaultValue: "Nuevo",
     },
     bateria: {
       type: DataTypes.INTEGER,
@@ -44,6 +45,10 @@ module.exports = (sequelize) => {
     },
     informacion: {
       type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    favorito: {
+      type: DataTypes.BOOLEAN,
       allowNull: true,
     },
   });

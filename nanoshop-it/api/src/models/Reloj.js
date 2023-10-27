@@ -15,7 +15,7 @@ module.exports = (sequelize) => {
     },
     marca: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       defaultValue: "Apple",
     },
     modelo: {
@@ -32,6 +32,10 @@ module.exports = (sequelize) => {
     },
     informacion: {
       type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    favorito: {
+      type: DataTypes.BOOLEAN,
       allowNull: true,
     },
   });

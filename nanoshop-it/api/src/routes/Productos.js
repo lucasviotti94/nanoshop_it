@@ -23,24 +23,26 @@ router.get("/", async (req, res) => {
     var productosDB = [];
 
     try {
-      let adaptadoresDB = await Adaptador.findAll({});
-      productosDB = [...productosDB, ...adaptadoresDB];
+      let adaptadorDB = await Adaptador.findAll({});
+      adaptadorDB.length !== 0
+        ? (productosDB = [...productosDB, ...adaptadorDB])
+        : (productosDB = [
+            ...productosDB,
+            { response: "No existen Adaptadores en la Base de Datos." },
+          ]);
     } catch (error) {
-      productosDB = [
-        ...productosDB,
-        { response: "No existen Adaptadores en la Base de Datos." },
-      ];
       console.log(error.message);
     }
 
     try {
       let auricularesDB = await Auricular.findAll({});
-      productosDB = [...productosDB, ...auricularesDB];
+      auricularesDB.length !== 0
+        ? (productosDB = [...productosDB, ...auricularesDB])
+        : (productosDB = [
+            ...productosDB,
+            { response: "No existen Auriculares en la Base de Datos." },
+          ]);
     } catch (error) {
-      productosDB = [
-        ...productosDB,
-        { response: "No existen Auriculares en la Base de Datos." },
-      ];
       console.log(error.message);
     }
 

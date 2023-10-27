@@ -1,71 +1,27 @@
 import React, { useState, useEffect }from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from "react-router-dom"
+import { getModelosAll } from '../../redux/actions/actions';
 
-// import SearchBar from '../SearchBar/SearchBar'
-// import { arbolLinks as Menu } from './files';
-import { getProductsAll } from '../../redux/actions/actions';
+import { Search, SearchIconWrapper, StyledInputBase } from './variables.js' 
 
-import { styled, alpha } from '@mui/material/styles';
+
 import SearchIcon from '@mui/icons-material/Search';
-import InputBase from '@mui/material/InputBase';
 import LogoNano from "../../images/NanoLogo.png"
 import "./Navbar.css"
 
 
-
 export default function NavBar () {
 
-  const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(1),
-      width: 'auto',
-    },
-  }));
+  const dispatch = useDispatch();
 
-  const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }));
-  
-  const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-      padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-      transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('sm')]: {
-        width: '12ch',
-        '&:focus': {
-          width: '20ch',
-        },
-      },
-    },
-  }));
-  //   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getModelosAll());
+  }, [dispatch]);
 
-  // useEffect(() => {
-  //   dispatch(getProductsAll());
-  // }, [dispatch]);
-
-  const productosState = useSelector((state) => state.productos);
-  // console.log("soy el console log de la navbar", productosState)
-
+  const modelosState = useSelector((state) => state.modelos);
+  const menuLinks = ['Auriculares', 'iPhone', 'iPad', 'Mac', 'Watch']  
+  console.log("MODELOS: ", modelosState)
 
   const [dropDownAuriculares, setDropDownAuriculares] = useState(true)    //estados para que funcionen los dropdowns con los eventos onMouseEnter y onMouseLeave (un hover basicamente)
   const [dropDownAccesorios, setDropDownAccesorios] = useState(true)
@@ -119,43 +75,60 @@ export default function NavBar () {
       </div>
       <div className='downNavbar'>
         <div className='dropDown'>
-          <div to={"/productos/auriculares"} className={'linksDown'} onMouseEnter={e => handleOnMouseEnter('Auriculares')} onMouseLeave={e => handleOnMouseLeave('Auriculares')} >Auriculares</div>
-          <div className={dropDownAuriculares?'dropDown-menuOFF':'dropDown-menuON'}>
-            <div className="ul">
-            </div>
+              <div to={"/productos/accesorios"} className={'linksDown'} onMouseEnter={e => handleOnMouseEnter('Accesorios')} onMouseLeave={e => handleOnMouseLeave('Accesorios')} >Accesorios</div>
+              <div className={dropDownAccesorios?'dropDown-menuOFF':'dropDown-menuON'}>
+                <ul>
+                  <div className="li">Adaptadores</div>
+                  <div className="li">Cables</div>
+                  <div className="li">Cargadores</div>
+                  <div className="li">Fuentes</div>
+                  <div className="li">Fundas</div>
+                  <div className="li">Mallas</div>
+                  <div className="li">Vidrios Templados</div>
+                </ul>
+              </div>
           </div>
-        </div>
-        <div className="dropDown">
-          <div to={"/productos/accesorios"} className={'linksDown'} onMouseEnter={e => handleOnMouseEnter('Accesorios')} onMouseLeave={e => handleOnMouseLeave('Accesorios')}>Accesorios</div>
-          <div className={dropDownAccesorios?'dropDown-menuOFF':'dropDown-menuON'}>
-            Contenido Interior
-          </div>
-        </div>
-          <div className="dropDown">
-            <div to={"/productos/celulares"} className={'linksDown'} onMouseEnter={e => handleOnMouseEnter('iPhone')} onMouseLeave={e => handleOnMouseLeave('iPhone')}>iPhone</div>
-          <div className={dropDownIphone?'dropDown-menuOFF':'dropDown-menuON'}>
-            Contenido Interior
-          </div>
-        </div>
-        <div className="dropDown">
-            <div to={"/productos/tablets"} className={'linksDown'} onMouseEnter={e => handleOnMouseEnter('iPad')} onMouseLeave={e => handleOnMouseLeave('iPad')}>iPad</div>
-          <div className={dropDownIpad?'dropDown-menuOFF':'dropDown-menuON'}>
-            Contenido Interior
-          </div>
-        </div>
-          <div className="dropDown">
-            <div to={"/productos/computadoras"} className={'linksDown'} onMouseEnter={e => handleOnMouseEnter('Mac')} onMouseLeave={e => handleOnMouseLeave('Mac')}>Mac</div>
-            <div className={dropDownMac?'dropDown-menuOFF':'dropDown-menuON'}>
-              Contenido Interior
-            </div>
-          </div>
-          <div className="dropDown">
-            <div to={"/productos/relojes"} className={'linksDown'} onMouseEnter={e => handleOnMouseEnter('Watch')} onMouseLeave={e => handleOnMouseLeave('Watch')}>Watch</div>
-            <div className={dropDownWatch?'dropDown-menuOFF':'dropDown-menuON'}>
-              Contenido Interior
-            </div>
-          </div>
+        {
+            menuLinks.map(link => {
+              var variableModelos = []
+              var dropDown = Boolean;
+              if (link === 'Auriculares')  {
+                  dropDown = dropDownAuriculares;
+                  modelosState.Auriculares?.map(index => { return (variableModelos.push(index))})
+              } else if (link === 'iPhone') {
+                  dropDown = dropDownIphone
+                  modelosState.Celulares?.map(index => { return (variableModelos.push(index))}) 
+              } else if (link === 'iPad') {
+                  dropDown = dropDownIpad
+                  modelosState.Tablets?.map(index => { return (variableModelos.push(index))})
+              } else if (link === 'Mac') {
+                  dropDown = dropDownMac
+                  modelosState.Computadoras?.map(index => { return (variableModelos.push(index))})
+              } else {
+                dropDown = dropDownWatch
+                modelosState.Relojes?.map(index => { return (variableModelos.push(index))})
+              }
+              return (
+                <div className='dropDown'>
+                  <div to={"/productos/" + link.charAt(0).toUpperCase()} className={'linksDown'} onMouseEnter={e => handleOnMouseEnter(link)} onMouseLeave={e => handleOnMouseLeave(link)} >{link}</div>
+                  <div className={dropDown?'dropDown-menuOFF':'dropDown-menuON'}>
+                    <ul>
+                      {
+                        variableModelos?.map(modelo => {
+                          return (
+                            <li>
+                              {modelo}
+                            </li>
+                          )
+                        })
+                      }
+                    </ul>
+                  </div>
+                </div>
+              )
+            })
+        }
       </div>
     </div>
-  )
+    )
 }

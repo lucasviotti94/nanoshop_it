@@ -15,22 +15,22 @@ module.exports = (sequelize) => {
     },
     marca: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       defaultValue: "Apple",
     },
     modelo: {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    almacenamiento: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     color: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    tamaño: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    almacenamiento: {
+    pantalla: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -40,6 +40,10 @@ module.exports = (sequelize) => {
     },
     informacion: {
       type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    favorito: {
+      type: DataTypes.BOOLEAN,
       allowNull: true,
     },
   });

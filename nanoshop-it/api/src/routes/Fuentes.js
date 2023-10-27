@@ -76,7 +76,7 @@ router.delete("/:id", async (req, res) => {
     });
     res.send("Fuente borrado de la base de datos.").status(200);
   } catch (error) {
-    res.send("Error en la operacion: " + error.message).status(500);
+    res.send(error);
   }
 });
 

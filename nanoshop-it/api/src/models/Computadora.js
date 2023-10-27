@@ -15,7 +15,7 @@ module.exports = (sequelize) => {
     },
     marca: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       defaultValue: "Apple",
     },
     modelo: {
@@ -31,7 +31,7 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     pantalla: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     color: {
@@ -39,7 +39,7 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     chip: {
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     estado: {
@@ -52,6 +52,10 @@ module.exports = (sequelize) => {
     },
     informacion: {
       type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    favorito: {
+      type: DataTypes.BOOLEAN,
       allowNull: true,
     },
   });
