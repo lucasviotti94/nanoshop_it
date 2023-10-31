@@ -1,0 +1,15 @@
+.carousel {
+    margin-top: 2%;
+    width: 1080px;
+    height: 300px;
+    overflow: hidden;
+    z-index: 1; 
+} 
+
+.carousel-control-prev-icon {
+    margin-right: 12vh;
+}
+
+.carousel-control-next-icon {
+    margin-left: 12vh;
+}

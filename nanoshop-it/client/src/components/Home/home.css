@@ -1,4 +1,40 @@
-.home{
-    height: 100vh;
-    background-color: white;
+.home {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: aliceblue;
+}
+
+.titulo1Div{
+  display: flex;    
+  flex-direction: row;
+width: 1080px;
+margin-top: 3vh;
+}
+
+.hr1{
+  flex-grow: 1;
+  border: 2.5px solid black;
+  margin-top: 4vh;
+  width: 1080px;
+}
+
+.hr2{
+  position: relative;
+  flex-grow: 1;
+  border: 2.5px solid black;
+  margin-top: 2vh;
+}
+
+.titulo1{
+position: absolute;
+background-color: aliceblue;
+font-weight: 800;
+font-size: 3vh;
+left: 50%;
+top: 30%;
+transform: translate(-50%, -50%);
+padding: 1.5vh;
 }

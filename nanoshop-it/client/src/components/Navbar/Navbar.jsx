@@ -1,4 +1,5 @@
 import React, { useState, useEffect }from 'react';
+
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from "react-router-dom"
 import { getModelosAll } from '../../redux/actions/actions';
@@ -66,8 +67,9 @@ export default function NavBar () {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search"
+              placeholder=""
               inputProps={{ 'aria-label': 'search' }}
+              style={{fontWeight:'800'}}
             />
           </Search>
         </div>
@@ -117,7 +119,7 @@ export default function NavBar () {
                           variableModelos?.map(modelo => {
                             return (
                               <li>
-                                <a className='linksToProduct' href={'/productos/' +  (link.charAt(0).toLocaleLowerCase() + link.slice(1)) + "/" + modelo}>
+                                <a className='linksToProduct' href={'/productos/' +  (link.charAt(0).toLocaleLowerCase() + link.slice(1)) + "/" + modelo} key={modelo}>
                                 {modelo}
                                 </a>
                               </li>

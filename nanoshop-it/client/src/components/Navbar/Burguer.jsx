@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import { useSelector, useDispatch } from 'react-redux';
-import { getModelosAll } from '../../redux/actions/actions';
 
 import MenuIcon from '@mui/icons-material/Menu';
 import { styled } from '@mui/material/styles';
@@ -14,39 +12,39 @@ import Typography from '@mui/material/Typography';
 
 const Accordion = styled((props) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
-  ))(({ theme }) => ({
-    border: `1px solid ${theme.palette.divider}`,
-    '&:not(:last-child)': {
-      borderBottom: 0,
-    },
-    '&:before': {
-      display: 'none',
-    },
-  }));
+      ))(({ theme }) => ({
+        border: `1px solid ${theme.palette.divider}`,
+        '&:not(:last-child)': {
+          borderBottom: 0,
+        },
+        '&:before': {
+          display: 'none',
+        },
+      }));
   
   const AccordionSummary = styled((props) => (
     <MuiAccordionSummary
-      expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
-      {...props}
-    />
-  ))(({ theme }) => ({
-    backgroundColor:
-      theme.palette.mode === 'dark'
-        ? 'rgba(255, 255, 255, .05)'
-        : 'rgba(0, 0, 0, .03)',
-    flexDirection: 'row-reverse',
-    '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
-      transform: 'rotate(90deg)',
-    },
-    '& .MuiAccordionSummary-content': {
-      marginLeft: theme.spacing(1),
-    },
-  }));
-  
-  const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
-    padding: theme.spacing(2),
-    borderTop: '1px solid rgba(0, 0, 0, .125)',
-  }));
+          expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+          {...props}
+        />
+      ))(({ theme }) => ({
+        backgroundColor:
+          theme.palette.mode === 'dark'
+            ? 'rgba(255, 255, 255, .05)'
+            : 'rgba(0, 0, 0, .03)',
+        flexDirection: 'row-reverse',
+        '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+          transform: 'rotate(90deg)',
+        },
+        '& .MuiAccordionSummary-content': {
+          marginLeft: theme.spacing(1),
+        },
+      }));
+      
+      const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+        padding: theme.spacing(2),
+        borderTop: '1px solid rgba(0, 0, 0, .125)',
+      }));
 
 
 export default function Burguer (props) {
@@ -57,7 +55,7 @@ export default function Burguer (props) {
     const [show, setShow] = useState(false);
     const handleShowNav = () => setShow(true);
     const handleCloseNav = () => setShow(false);
-    const [expanded, setExpanded] = React.useState('panel'+ counter.toString());    
+    const [expanded, setExpanded] = React.useState('');    
 
 
     const handleChange = (panel) => (event, newExpanded) => {       
@@ -100,7 +98,6 @@ export default function Burguer (props) {
                         } else {
                             props.Relojes?.map(model => { return (variableModelos.push(model))})
                         }
-                        console.log("VARIABLE DE MODELOS PUSHEADOS", variableModelos)
                         return (
                             <Accordion expanded={expanded === 'panel'+ counter.toString()} onChange={handleChange('panel'+ counter.toString())} style={{ backgroundColor: 'black', border: 'none'}}>
                                 <AccordionSummary aria-controls={('panel'+ counter.toString()) + "d-content"} id={('panel'+ counter.toString()) + "d-header"} style={{ backgroundColor: 'white'}}>

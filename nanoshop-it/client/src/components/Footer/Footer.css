@@ -1,0 +1,24 @@
+.footer{    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5vh;
+}
+
+.footerContenido{
+    width: 120vh;
+}
+
+.titulo{
+    display: flex;
+    justify-content: center;
+    margin-top: 3vh; 
+    margin-bottom: 3vh;
+}
+
+.footerInfo{
+    display: flex;
+    justify-content: center;
+    margin-top: 3vh; 
+    margin-bottom: 3vh;
+}

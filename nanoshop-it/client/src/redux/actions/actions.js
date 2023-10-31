@@ -38,6 +38,7 @@ export function getProductsAll(query, search) {
           type: GET_PRODUCTOS,
           payload: a.data,
         });
+        console.log("CALL", a);
       })
       .catch((err) => {});
   };
