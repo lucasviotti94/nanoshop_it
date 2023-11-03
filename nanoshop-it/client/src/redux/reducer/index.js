@@ -25,6 +25,8 @@ import {
   GET_TABLET_BY_ID,
   GET_VIDRIOS_ALL,
   GET_VIDRIO_BY_ID,
+  GET_CONJUNTOS_ALL,
+  GET_CONJUNTO_ID,
 } from "../actions/actions_vars";
 
 const initialState = {
@@ -37,12 +39,12 @@ const initialState = {
   computadoras: [],
   fuentes: {},
   fundas: [],
-  mallas: {},
-  relojes: {},
+  mallas: [],
+  relojes: [],
   tablets: [],
   vidrios: [],
-  conjuntos: [],
   modelos: [],
+  conjuntos: [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -176,6 +178,16 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         vidrios: action.payload,
+      };
+    case GET_CONJUNTOS_ALL:
+      return {
+        ...state,
+        conjuntos: action.payload,
+      };
+    case GET_CONJUNTO_ID:
+      return {
+        ...state,
+        conjuntos: action.payload,
       };
     default:
       return state;

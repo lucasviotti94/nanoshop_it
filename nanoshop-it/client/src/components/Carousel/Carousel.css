@@ -13,3 +13,8 @@
 .carousel-control-next-icon {
     margin-left: 12vh;
 }
+
+.carousel-indicators button {
+    background-color: black;
+
+}

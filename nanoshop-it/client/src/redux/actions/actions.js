@@ -27,6 +27,8 @@ import {
   GET_TABLET_BY_ID,
   GET_VIDRIOS_ALL,
   GET_VIDRIO_BY_ID,
+  GET_CONJUNTOS_ALL,
+  GET_CONJUNTO_ID,
 } from "./actions_vars";
 
 export function getProductsAll(query, search) {
@@ -388,6 +390,34 @@ export function getVidrioProtectorById(id) {
         dispatch({
           type: GET_VIDRIO_BY_ID,
           payload: v.data,
+        });
+      })
+      .catch((err) => {});
+  };
+}
+
+export function getConjuntosAll() {
+  return function (dispatch) {
+    axios
+      .get("http://localhost:3000/conjuntos")
+      .then((c) => {
+        dispatch({
+          type: GET_CONJUNTOS_ALL,
+          payload: c.data,
+        });
+      })
+      .catch((err) => {});
+  };
+}
+
+export function getConjuntoById(id) {
+  return function (dispatch) {
+    axios
+      .get("http://localhost:3000/conjuntos/" + id)
+      .then((c) => {
+        dispatch({
+          type: GET_CONJUNTO_ID,
+          payload: c.data,
         });
       })
       .catch((err) => {});

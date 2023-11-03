@@ -1,15 +1,16 @@
 import React, { useState, useEffect }from 'react';
-
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from "react-router-dom"
-import { getModelosAll } from '../../redux/actions/actions';
 
-import { Search, SearchIconWrapper, StyledInputBase } from './variables.js'
 import Burguer from './Burguer.jsx';
+import Carrito from '../Carrito/Carrito.jsx'
+import { getModelosAll } from '../../redux/actions/actions';
+import { Search, SearchIconWrapper, StyledInputBase } from './variables.js'
 
 import SearchIcon from '@mui/icons-material/Search';
 import LogoNano from "../../images/NanoLogo.png";
 import "./Navbar.css"
+
 
 
 export default function NavBar () {
@@ -80,13 +81,13 @@ export default function NavBar () {
               <div to={"/productos/accesorios"} className={'linksDown'}>Accesorios</div>
               <div className={dropDownAccesorios?'dropDown-menuOFF':'dropDown-menuON'} onMouseLeave={(e) => handleOnMouseLeave('Accesorios')}>
                 <ul className='ulLinks'>
-                  <li> <a className='linksToProduct' href={'/productos/adaptadores'} >Adaptadores</a></li>
-                  <li> <a className='linksToProduct' href={'/productos/cables'} >Cables</a></li>
-                  <li> <a className='linksToProduct' href={'/productos/cargdores'} >Cargadores</a></li>
-                  <li> <a className='linksToProduct' href={'/productos/fuentes'} >Fuentes</a></li>
-                  <li> <a className='linksToProduct' href={'/productos/fundas'} >Fundas</a></li>
-                  <li> <a className='linksToProduct' href={'/productos/mallas'} >Mallas</a></li>
-                  <li> <a className='linksToProduct' href={'/productos/vidriosProtectores'} >Vidrios Templados</a></li>
+                  <li key='adaptadores'> <a className='linksToProduct' href={'/productos/adaptadores'} key='adaptadoresA' >Adaptadores</a></li>
+                  <li key='auriculares' > <a className='linksToProduct' href={'/productos/cables'} key='auricularesA' >Cables</a></li>
+                  <li key='cargadores'> <a className='linksToProduct' href={'/productos/cargdores'} key='cargadoresA'>Cargadores</a></li>
+                  <li key='fuentes'> <a className='linksToProduct' href={'/productos/fuentes'} key='fuentesA'>Fuentes</a></li>
+                  <li key='fundas'> <a className='linksToProduct' href={'/productos/fundas'} key='fundasA'>Fundas</a></li>
+                  <li key='mallas'> <a className='linksToProduct' href={'/productos/mallas'} key='mallasA'>Mallas</a></li>
+                  <li key='vidriosProtectores'> <a className='linksToProduct' href={'/productos/vidriosProtectores'} key='vidriosProtectoresA'>Vidrios Templados</a></li>
                 </ul>
               </div>
           </div>
@@ -118,7 +119,7 @@ export default function NavBar () {
                       {
                           variableModelos?.map(modelo => {
                             return (
-                              <li>
+                              <li key={modelo}>
                                 <a className='linksToProduct' href={'/productos/' +  (link.charAt(0).toLocaleLowerCase() + link.slice(1)) + "/" + modelo} key={modelo}>
                                 {modelo}
                                 </a>
@@ -132,6 +133,8 @@ export default function NavBar () {
               )
             })
         }
+      <Carrito />
+
       </div>
     </div>
     )

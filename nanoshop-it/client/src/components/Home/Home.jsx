@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getProductsAll } from '../../redux/actions/actions';
+import { getConjuntosAll } from '../../redux/actions/actions';
 import Carrousel from '../Carousel/Carousel.jsx';
 import CardsHome from '../Cards/CardsHome.jsx'
 
@@ -11,11 +11,10 @@ export default function Home() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getProductsAll());
+        dispatch(getConjuntosAll());
     }, [dispatch]);
     
-    const allProductsStore = useSelector((state) => state.productos);  
-console.log(allProductsStore)
+    const conjuntosALL = useSelector((state) => state.conjuntos);
     return (
         <div className='home'>
             <div className='hr1'></div>
@@ -25,7 +24,7 @@ console.log(allProductsStore)
                 <div className="titulo1">DESTACADOS</div>
             </div>    
             </div>
-            <CardsHome {...allProductsStore}/>
+            <CardsHome {...conjuntosALL}/>
         </div>
 
         );

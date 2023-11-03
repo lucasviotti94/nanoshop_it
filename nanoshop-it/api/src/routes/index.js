@@ -14,6 +14,7 @@ const modelTablet = require("./Tablets.js");
 const modelVidrio = require("./Vidrios_Protectores.js");
 const modelProductos = require("./Productos.js");
 const modelModelos = require("./ModelosDD.js");
+const modelConjunto = require("./Conjuntos.js");
 
 const router = Router();
 
@@ -30,6 +31,7 @@ router.use("/relojes", modelReloj);
 router.use("/tablets", modelTablet);
 router.use("/vidrios_protectores", modelVidrio);
 router.use("/productos", modelProductos);
+router.use("/conjuntos", modelConjunto);
 router.use("/modelos", modelModelos);
 
 module.exports = router;
