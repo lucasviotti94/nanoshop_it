@@ -22,16 +22,16 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    color: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     precio: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
     informacion: {
       type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    imagenUbicacion: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
     },
     favorito: {

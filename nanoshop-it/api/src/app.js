@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const routes = require("./routes/index.js");
 const http = require("http");
+const path = require("path");
 
 require("./db.js");
 
@@ -13,6 +14,7 @@ const cors = require("cors");
 app.name = "API";
 
 app.use(cors());
+app.use(express.static("E:/Repositorios/nanoshop_it/nanoshop-it/api/public")); // usar un middleware  para servir archivos estaticos (imagenes, archivos CSS), path completo de la carpeta
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(cookieParser());

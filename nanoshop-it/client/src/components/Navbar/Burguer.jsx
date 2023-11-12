@@ -72,13 +72,13 @@ export default function Burguer (props) {
                     </AccordionSummary>
                     <AccordionDetails>
                     <div className='ulLinksOffCanvas'>
-                        <Link className='linksToProduct' to={'/productos/adaptadores'} onClick={handleCloseNav} >Adaptadores</Link>
-                        <Link className='linksToProduct' to={'/productos/cables'} onClick={handleCloseNav} >Cables</Link>
-                        <Link className='linksToProduct' to={'/productos/cargadores'} onClick={handleCloseNav} >Cargadores</Link>
-                        <Link className='linksToProduct' to={'/productos/fuentes'} onClick={handleCloseNav} >Fuentes</Link>
-                        <Link className='linksToProduct' to={'/productos/fundas'} onClick={handleCloseNav} >Fundas</Link>
-                        <Link className='linksToProduct' to={'/productos/mallas'} onClick={handleCloseNav} >Mallas</Link>
-                        <Link className='linksToProduct' to={'/productos/vidriosProtectores'} onClick={handleCloseNav} >Vidrios Templados</Link>
+                        <Link className='linksToProduct' to={'/productos/adaptador'} onClick={handleCloseNav} >Adaptadores</Link>
+                        <Link className='linksToProduct' to={'/productos/cable'} onClick={handleCloseNav} >Cables</Link>
+                        <Link className='linksToProduct' to={'/productos/cargador'} onClick={handleCloseNav} >Cargadores</Link>
+                        <Link className='linksToProduct' to={'/productos/fuente'} onClick={handleCloseNav} >Fuentes</Link>
+                        <Link className='linksToProduct' to={'/productos/funda'} onClick={handleCloseNav} >Fundas</Link>
+                        <Link className='linksToProduct' to={'/productos/malla'} onClick={handleCloseNav} >Mallas</Link>
+                        <Link className='linksToProduct' to={'/productos/vidrioProtector'} onClick={handleCloseNav} >Vidrios Templados</Link>
                     </div>
                     </AccordionDetails>
                 </Accordion>
@@ -110,7 +110,7 @@ export default function Burguer (props) {
                                   variableModelos?.map(modelo => {
                                     return (
                                       <li>
-                                        <a className='linksToProduct' href={'/productos/auriculares/' + modelo} onClick={handleCloseNav} key={modelo} >
+                                        <a className='linksToProduct' href={'/productos/' + (link.charAt(0).toLocaleLowerCase() + link.slice(1)) + "/" + modelo} onClick={handleCloseNav} key={modelo} >
                                         {modelo}
                                         </a>
                                       </li>

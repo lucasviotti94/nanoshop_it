@@ -18,6 +18,8 @@ const {
   Vidrio_Protector,
 } = Modelos;
 
+//Esta ruta es simplemente para traer todos los productos de la base de datos
+
 router.get("/", async (req, res) => {
   try {
     var productosDB = [];

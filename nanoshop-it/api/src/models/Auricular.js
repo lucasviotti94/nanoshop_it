@@ -24,16 +24,16 @@ module.exports = (sequelize) => {
     },
     ficha: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     inalambrico: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
     color: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      defaultValue: "Blanco",
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: false,
+      defaultValue: ["Blanco"], //El error values.map popeaba aca porque no tenia el color Blanco encerrato en corchetes. (tiene sentido ya que es un array XD)
     },
     estado: {
       type: DataTypes.STRING,
@@ -46,6 +46,10 @@ module.exports = (sequelize) => {
     },
     informacion: {
       type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    imagenUbicacion: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
     },
     favorito: {

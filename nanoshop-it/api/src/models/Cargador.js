@@ -44,6 +44,10 @@ module.exports = (sequelize) => {
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    imagenUbicacion: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true,
+    },
     favorito: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
