@@ -6,13 +6,18 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
+import Image from 'react-bootstrap/Image'
 
-import img1 from './images/cardSlider1.jpeg'
+import CardModal from './Modal/cardModel.jsx';
+import { useState } from 'react';
+import { width } from '@mui/system';
 
 function CardsHome(props) { 
 
   const { addToCart } = useCart()
-  
+  const URL_BASE = 'http://localhost:3000/'
+  const [imagen, setImagen] = useState([]);
+
   const valores = [];
 
   for(const clave in props) {
@@ -27,20 +32,25 @@ function CardsHome(props) {
         {
           valores?.map((conjunto) => {
             // const isProductInCart = checkProductInCart(conjunto)
+            
             return (
               <>
                 <Col key={conjunto.id}>
                   <Card style={{
-                    border: '2px solid black'
+                    // border: '2px solid black'
+                    border: 'none',
+                    boxShadow: '1px 1px 10px 1px gray'
                   }}
                     bg='light'>
                     <Link to={'./productos/' + (conjunto.producto).charAt(0).toLocaleLowerCase() + (conjunto.producto).slice(1) + '/' + conjunto.modelo}>
-                      <Card.Img variant="top" src={img1}
-                      style={{
-                        padding: '1vh',
-                        opacity: 1
-                      }}
-                      />
+                      <Image src={`${URL_BASE}${conjunto.imagenUbicacion[0]}`} fluid thumbnail />
+                      {/* <img 
+                        src={`${URL_BASE}${conjunto.imagenUbicacion[0]}`}
+                        style={{
+                          width: '200px',
+                          heigth:'150px',
+                        }}                        
+                      />  */}
                     </Link>
                     <Card.Body
                           style={{
@@ -53,23 +63,28 @@ function CardsHome(props) {
                           fontWeight: '800',
                           padding: '0.5vh',
                           fontSize: '2.5vh'
-                      }}
+                        }}
                       >{conjunto?.modelo} </Card.Title>
-                      <ListGroup.Item                style={{
+                      <ListGroup.Item                
+                        style={{
                           fontWeight: '800',
-                      }}>${conjunto?.precio}</ListGroup.Item>
-                      <ListGroup.Item                style={{
-                          display: 'flex',
-                          fontWeight: '800',
-                          padding: '0.5vh',
-                          justifyContent: 'center',
-                          alignContent: 'center'
-                      }}>{conjunto?.cantidad}</ListGroup.Item>
+                        }}
+                        >${conjunto?.precio} </ListGroup.Item>
+                      <ListGroup.Item                
+                        style={{
+                            display: 'flex',
+                            fontWeight: '800',
+                            padding: '0.5vh',
+                            justifyContent: 'center',
+                            alignContent: 'center'
+                      }}
+                      >{conjunto?.cantidad} </ListGroup.Item>
                       <Button 
-                        onClick={() => addToCart(props[0])}
+                        href={'./productos/' + (conjunto.producto).charAt(0).toLocaleLowerCase() + (conjunto.producto).slice(1) + '/' + conjunto.modelo}
                         variant="outline-success"
                         >Ver Más
                       </Button>
+                      <CardModal { ...conjunto } />
                     </Card.Body>
                   </Card>
                 </Col>

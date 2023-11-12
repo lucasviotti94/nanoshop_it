@@ -81,13 +81,13 @@ export default function NavBar () {
               <div to={"/productos/accesorios"} className={'linksDown'}>Accesorios</div>
               <div className={dropDownAccesorios?'dropDown-menuOFF':'dropDown-menuON'} onMouseLeave={(e) => handleOnMouseLeave('Accesorios')}>
                 <ul className='ulLinks'>
-                  <li key='adaptadores'> <a className='linksToProduct' href={'/productos/adaptadores'} key='adaptadoresA' >Adaptadores</a></li>
-                  <li key='auriculares' > <a className='linksToProduct' href={'/productos/cables'} key='auricularesA' >Cables</a></li>
-                  <li key='cargadores'> <a className='linksToProduct' href={'/productos/cargdores'} key='cargadoresA'>Cargadores</a></li>
-                  <li key='fuentes'> <a className='linksToProduct' href={'/productos/fuentes'} key='fuentesA'>Fuentes</a></li>
-                  <li key='fundas'> <a className='linksToProduct' href={'/productos/fundas'} key='fundasA'>Fundas</a></li>
-                  <li key='mallas'> <a className='linksToProduct' href={'/productos/mallas'} key='mallasA'>Mallas</a></li>
-                  <li key='vidriosProtectores'> <a className='linksToProduct' href={'/productos/vidriosProtectores'} key='vidriosProtectoresA'>Vidrios Templados</a></li>
+                  <li key='adaptadores'> <a className='linksToProduct' href={'/productos/adaptador'} key='adaptadoresA' >Adaptadores</a></li>
+                  <li key='auriculares' > <a className='linksToProduct' href={'/productos/cable'} key='auricularesA' >Cables</a></li>
+                  <li key='cargadores'> <a className='linksToProduct' href={'/productos/cargador'} key='cargadoresA'>Cargadores</a></li>
+                  <li key='fuentes'> <a className='linksToProduct' href={'/productos/fuente'} key='fuentesA'>Fuentes</a></li>
+                  <li key='fundas'> <a className='linksToProduct' href={'/productos/funda'} key='fundasA'>Fundas</a></li>
+                  <li key='mallas'> <a className='linksToProduct' href={'/productos/malla'} key='mallasA'>Mallas</a></li>
+                  <li key='vidriosProtectores'> <a className='linksToProduct' href={'/productos/vidrioProtector'} key='vidriosProtectoresA'>Vidrios Templados</a></li>
                 </ul>
               </div>
           </div>
