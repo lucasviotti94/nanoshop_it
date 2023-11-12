@@ -3,7 +3,7 @@ const { Sequelize, Op } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 
-const sequelize = new Sequelize("dbhuevo", "postgres", "Minotauro90??", {
+const sequelize = new Sequelize("nanoide", "postgres", "Minotauro90??", {
   host: "localhost",
   dialect: "postgres",
 });
@@ -44,7 +44,7 @@ const {
   Cargador,
   Celular,
   Computadora,
-  ConjuntoDeProductos,
+  Conjunto,
   Fuente,
   Funda,
   Malla,
@@ -54,64 +54,41 @@ const {
   Vidrio_Protector,
 } = Modelos;
 
-ConjuntoDeProductos.hasMany(Adaptador, {
-  foreignKey: "Conjunto_Adaptadores",
-});
-Adaptador.belongsTo(ConjuntoDeProductos, {
-  foreignKey: "Conjunto_Adaptadores",
-});
+Conjunto.hasMany(Adaptador, { foreignKey: "Conjunto_Adaptadores" });
+Adaptador.belongsTo(Conjunto, { foreignKey: "Conjunto_Adaptadores" });
 
-ConjuntoDeProductos.hasMany(Auricular, {
-  foreignKey: "Conjunto_Auriculares",
-});
-Auricular.belongsTo(ConjuntoDeProductos, {
-  foreignKey: "Conjunto_Auriculares",
-});
+Conjunto.hasMany(Auricular, { foreignKey: "Conjunto_Auriculares" });
+Auricular.belongsTo(Conjunto, { foreignKey: "Conjunto_Auriculares" });
 
-ConjuntoDeProductos.hasMany(Cable, { foreignKey: "Conjunto_Cables" });
-Cable.belongsTo(ConjuntoDeProductos, { foreignKey: "Conjunto_Cables" });
+Conjunto.hasMany(Cable, { foreignKey: "Conjunto_Cables" });
+Cable.belongsTo(Conjunto, { foreignKey: "Conjunto_Cables" });
 
-ConjuntoDeProductos.hasMany(Cargador, {
-  foreignKey: "Conjunto_Cargadores",
-});
-Cargador.belongsTo(ConjuntoDeProductos, { foreignKey: "Conjunto_Cargadores" });
+Conjunto.hasMany(Cargador, { foreignKey: "Conjunto_Cargadores" });
+Cargador.belongsTo(Conjunto, { foreignKey: "Conjunto_Cargadores" });
 
-ConjuntoDeProductos.hasMany(Celular, { foreignKey: "Conjunto_Celular" });
-Celular.belongsTo(ConjuntoDeProductos, { foreignKey: "Conjunto_Celular" });
+Conjunto.hasMany(Celular, { foreignKey: "Conjunto_Celular" });
+Celular.belongsTo(Conjunto, { foreignKey: "Conjunto_Celular" });
 
-ConjuntoDeProductos.hasMany(Computadora, {
-  foreignKey: "Conjunto_Computadoras",
-});
-Computadora.belongsTo(ConjuntoDeProductos, {
-  foreignKey: "Conjunto_Computadoras",
-});
+Conjunto.hasMany(Computadora, { foreignKey: "Conjunto_Computadoras" });
+Computadora.belongsTo(Conjunto, { foreignKey: "Conjunto_Computadoras" });
 
-ConjuntoDeProductos.hasMany(Fuente, { foreignKey: "Conjunto_Fuentes" });
-Fuente.belongsTo(ConjuntoDeProductos, { foreignKey: "Conjunto_Fuentes" });
+Conjunto.hasMany(Fuente, { foreignKey: "Conjunto_Fuentes" });
+Fuente.belongsTo(Conjunto, { foreignKey: "Conjunto_Fuentes" });
 
-ConjuntoDeProductos.hasMany(Funda, { foreignKey: "Conjunto_Funda" });
-Funda.belongsTo(ConjuntoDeProductos, { foreignKey: "Conjunto_Funda" });
+Conjunto.hasMany(Funda, { foreignKey: "Conjunto_Funda" });
+Funda.belongsTo(Conjunto, { foreignKey: "Conjunto_Funda" });
 
-ConjuntoDeProductos.hasMany(Malla, { foreignKey: "Conjunto_Malla" });
-Malla.belongsTo(ConjuntoDeProductos, { foreignKey: "Conjunto_Malla" });
+Conjunto.hasMany(Malla, { foreignKey: "Conjunto_Malla" });
+Malla.belongsTo(Conjunto, { foreignKey: "Conjunto_Malla" });
 
-ConjuntoDeProductos.hasMany(ModelosDD, {
-  foreignKey: "Conjunto_ModelosDDs",
-});
-ModelosDD.belongsTo(ConjuntoDeProductos, { foreignKey: "Conjunto_ModelosDDs" });
+Conjunto.hasMany(Reloj, { foreignKey: "Conjunto_Relojes" });
+Reloj.belongsTo(Conjunto, { foreignKey: "Conjunto_Relojes" });
 
-ConjuntoDeProductos.hasMany(Reloj, { foreignKey: "Conjunto_Relojes" });
-Reloj.belongsTo(ConjuntoDeProductos, { foreignKey: "Conjunto_Relojes" });
+Conjunto.hasMany(Tablet, { foreignKey: "Conjunto_Tablets" });
+Tablet.belongsTo(Conjunto, { foreignKey: "Conjunto_Tablets" });
 
-ConjuntoDeProductos.hasMany(Tablet, { foreignKey: "Conjunto_Tablets" });
-Tablet.belongsTo(ConjuntoDeProductos, { foreignKey: "Conjunto_Tablets" });
-
-ConjuntoDeProductos.hasMany(Vidrio_Protector, {
-  foreignKey: "Conjunto_Vidrio_Protector",
-});
-Vidrio_Protector.belongsTo(ConjuntoDeProductos, {
-  foreignKey: "Conjunto_Vidrio_Protector",
-});
+Conjunto.hasMany(Vidrio_Protector, { foreignKey: "Conjunto_Vidrio" });
+Vidrio_Protector.belongsTo(Conjunto, { foreignKey: "Conjunto_Vidrio" });
 
 module.exports = {
   conn: sequelize,

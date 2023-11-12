@@ -1,74 +1,110 @@
 const { Router } = require("express");
-const { Op, Modelos } = require("../db.js");
+const multer = require("multer");
+const path = require("path");
 
+const { Op, Modelos } = require("../db.js");
+const { Funda, Conjunto } = Modelos;
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public");
+  },
+  filename: (req, file, cb) => {
+    cb(
+      null,
+      file.fieldname + "_" + Date.now() + path.extname(file.originalname)
+    );
+  },
+});
+const upload = multer({ storage });
 const router = Router();
 
-const { Funda } = Modelos;
+router.post("/", upload.array("file"), async (req, res, next) => {
+  const { marca, modelo, tipo, color, precio, informacion, cantidad } =
+    req.body;
 
-router.get("/", async (req, res) => {
   try {
-    let fundasDB = await Funda.findAll({});
-
-    res.status(200).send(fundasDB);
+    if (cantidad >= 2) {
+      const conjunto = await Conjunto.create({
+        producto: "Funda",
+        marca: marca,
+        modelo: modelo,
+        cantidad: cantidad,
+        precio: precio,
+      });
+      var coloresArray = [...color.split(",")];
+      for (let i = 0; i < cantidad; i++) {
+        const colorIterado = coloresArray[i];
+        let fundaNueva = await Funda.create({
+          marca: marca,
+          modelo: modelo,
+          tipo: tipo,
+          color: coloresArray.length > 1 ? [colorIterado] : coloresArray,
+          precio: precio,
+          informacion: informacion,
+          imagenUbicacion:
+            typeof req.files === "object" &&
+            req.files.map((imagen) => {
+              return imagen.filename;
+            }),
+        });
+        conjunto.addFunda(fundaNueva);
+      }
+      res.status(200).json({ conjunto });
+    } else {
+      let fundaNueva = await Funda.create({
+        marca: marca,
+        modelo: modelo,
+        tipo: tipo,
+        color: [color],
+        precio: precio,
+        informacion: informacion,
+        imagenUbicacion:
+          typeof req.files === "object" &&
+          req.files.map((imagen) => {
+            return imagen.filename;
+          }),
+      });
+      res.status(200).json({ fundaNueva });
+    }
   } catch (error) {
-    res.send("Error en la operacion: " + error.message);
+    res.send("Error en la operacion: " + error.message).status(500);
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.put("/:id", upload.array("file"), async (req, res, next) => {
   const { id } = req.params;
-  try {
-    const fundaByID = await Funda.findOne({ where: { id: id } });
-    res.send(fundaByID).status(200);
-  } catch (error) {
-    res.send("Error en la operacion: " + error.message).status(500);
-  }
-});
-
-router.post("/", async (req, res, next) => {
   const { marca, modelo, tipo, color, precio, informacion } = req.body;
-
-  try {
-    let fuenteNueva = await Funda.create({
-      marca: marca,
-      modelo: modelo,
-      tipo: tipo,
-      color: color,
-      precio: precio,
-      informacion: informacion,
-    });
-
-    res.status(200).send(fuenteNueva);
-  } catch (error) {
-    res.send("Error en la operacion: " + error.message).status(500);
-  }
-});
-
-router.put("/", async (req, res, next) => {
-  const { id, marca, modelo, tipo, color, precio, informacion } = req.body;
 
   try {
     const fundaByIdDB = await Funda.findOne({ where: { id: id } });
 
-    if (marca) {
+    if (typeof marca !== undefined) {
       await fundaByIdDB.update({ marca: marca });
     }
-    if (modelo) {
+    if (typeof marca !== undefined) {
       await fundaByIdDB.update({ modelo: modelo });
     }
-    if (tipo) {
+    if (typeof tipo !== undefined) {
       await fundaByIdDB.update({ tipo: tipo });
     }
-    if (color) {
-      await fundaByIdDB.update({ color: color });
+    if (typeof color !== undefined) {
+      await fundaByIdDB.update({ color: [color] });
     }
-    if (precio) {
+    if (typeof precio !== undefined) {
       await fundaByIdDB.update({ precio: precio });
     }
-    if (informacion) {
+    if (typeof informacion !== undefined) {
       await fundaByIdDB.update({ informacion: informacion });
     }
-    res.status(200);
+    if (typeof req.files !== undefined) {
+      await fundaByIdDB.update({
+        imagenUbicacion: req.files.map((imagen) => {
+          return imagen.filename;
+        }),
+      });
+    }
+    res.status(200).json({ fundaByIdDB });
   } catch (error) {
     res.send("Error en la operacion: " + error.message).status(500);
   }
@@ -83,6 +119,25 @@ router.delete("/:id", async (req, res) => {
       },
     });
     res.send("Funda borrado de la base de datos.").status(200);
+  } catch (error) {
+    res.send("Error en la operacion: " + error.message).status(500);
+  }
+});
+
+router.get("/", async (req, res) => {
+  try {
+    let fundasDB = await Funda.findAll({});
+    res.status(200).json({ fundasDB });
+  } catch (error) {
+    res.send("Error en la operacion: " + error.message);
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const fundaByID = await Funda.findOne({ where: { id: id } });
+    res.json({ fundaByID }).status(200);
   } catch (error) {
     res.send("Error en la operacion: " + error.message).status(500);
   }

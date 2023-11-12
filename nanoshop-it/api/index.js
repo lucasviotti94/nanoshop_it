@@ -17,6 +17,6 @@ const { conn } = require("./src/db.js");
 
 conn.sync({ force: false }).then(() => {
   server.listen(3000, () => {
-    console.log("Conectado al puerto 3000");
+    console.log("Conectado al puerto 3001");
   });
 });

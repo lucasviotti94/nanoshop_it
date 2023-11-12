@@ -13,6 +13,10 @@ module.exports = (sequelize) => {
       allowNull: true,
       defaultValue: "Fuente",
     },
+    modelo: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     marca: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -28,6 +32,10 @@ module.exports = (sequelize) => {
     },
     informacion: {
       type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    imagenUbicacion: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
     },
     favorito: {
