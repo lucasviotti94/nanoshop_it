@@ -1,27 +1,33 @@
 const { Router } = require("express");
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs").promises;
+const sharp = require("sharp");
 
 const { Op, Modelos } = require("../db.js");
 const { Vidrio_Protector, Conjunto } = Modelos;
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public");
-  },
-  filename: (req, file, cb) => {
-    cb(
-      null,
-      file.fieldname + "_" + Date.now() + path.extname(file.originalname)
-    );
-  },
-});
-const upload = multer({ storage });
 const router = Router();
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 router.post("/", upload.array("file"), async (req, res, next) => {
   const { marca, modelo, color, precio, informacion, cantidad } = req.body;
 
+  const arrayUbicacionesImagenes = [];
+  const imagenesProcesadas = await Promise.all(
+    req.files.map(async (file) => {
+      const imagenProcesadaBuffer = await sharp(file.buffer)
+        .resize({ width: 500, height: 500, fit: "cover" })
+        .rotate()
+        .toBuffer();
+      const nombreArchivo =
+        file.fieldname + "_" + Date.now() + path.extname(file.originalname);
+      arrayUbicacionesImagenes.push(nombreArchivo);
+      const rutaArchivo = path.join("public", nombreArchivo);
+      await fs.writeFile(rutaArchivo, imagenProcesadaBuffer);
+    })
+  );
   try {
     if (cantidad >= 2) {
       const conjunto = await Conjunto.create({
@@ -40,11 +46,9 @@ router.post("/", upload.array("file"), async (req, res, next) => {
           color: coloresArray.length > 1 ? [colorIterado] : coloresArray,
           precio: precio,
           informacion: informacion,
-          imagenUbicacion:
-            typeof req.files === "object" &&
-            req.files.map((imagen) => {
-              return imagen.filename;
-            }),
+          imagenUbicacion: arrayUbicacionesImagenes.map((imagen) => {
+            return imagen;
+          }),
         });
         conjunto.addVidrio_Protector(vidrioNuevo);
       }
@@ -56,11 +60,9 @@ router.post("/", upload.array("file"), async (req, res, next) => {
         color: [color],
         precio: precio,
         informacion: informacion,
-        imagenUbicacion:
-          typeof req.files === "object" &&
-          req.files.map((imagen) => {
-            return imagen.filename;
-          }),
+        imagenUbicacion: arrayUbicacionesImagenes.map((imagen) => {
+          return imagen;
+        }),
       });
       res.status(200).json({ vidrioNuevo });
     }
@@ -72,6 +74,22 @@ router.post("/", upload.array("file"), async (req, res, next) => {
 router.put("/:id", async (req, res, next) => {
   const { marca, modelo, color, precio, informacion } = req.body;
   const { id } = req.params;
+
+  const arrayUbicacionesImagenes = [];
+  const imagenesProcesadas = await Promise.all(
+    req.files.map(async (file) => {
+      const imagenProcesadaBuffer = await sharp(file.buffer)
+        .resize({ width: 500, height: 500, fit: "cover" })
+        .rotate()
+        .toBuffer();
+      const nombreArchivo =
+        file.fieldname + "_" + Date.now() + path.extname(file.originalname);
+      arrayUbicacionesImagenes.push(nombreArchivo);
+      const rutaArchivo = path.join("public", nombreArchivo);
+      await fs.writeFile(rutaArchivo, imagenProcesadaBuffer);
+    })
+  );
+
   try {
     const vidrioByIdDB = await Vidrio_Protector.findOne({ where: { id: id } });
     if (typeof marca !== undefined) {
@@ -89,10 +107,10 @@ router.put("/:id", async (req, res, next) => {
     if (typeof informacion !== undefined) {
       await vidrioByIdDB.update({ informacion: informacion });
     }
-    if (typeof req.files !== undefined) {
+    if (arrayUbicacionesImagenes.length >= 1) {
       await vidrioByIdDB.update({
-        imagenUbicacion: req.files.map((imagen) => {
-          return imagen.filename;
+        imagenUbicacion: arrayUbicacionesImagenes.map((imagen) => {
+          return imagen;
         }),
       });
     }

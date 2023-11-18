@@ -66,8 +66,8 @@ Cable.belongsTo(Conjunto, { foreignKey: "Conjunto_Cables" });
 Conjunto.hasMany(Cargador, { foreignKey: "Conjunto_Cargadores" });
 Cargador.belongsTo(Conjunto, { foreignKey: "Conjunto_Cargadores" });
 
-Conjunto.hasMany(Celular, { foreignKey: "Conjunto_Celular" });
-Celular.belongsTo(Conjunto, { foreignKey: "Conjunto_Celular" });
+Conjunto.hasMany(Celular, { foreignKey: "Conjunto_Celulares" });
+Celular.belongsTo(Conjunto, { foreignKey: "Conjunto_Celulares" });
 
 Conjunto.hasMany(Computadora, { foreignKey: "Conjunto_Computadoras" });
 Computadora.belongsTo(Conjunto, { foreignKey: "Conjunto_Computadoras" });
@@ -75,11 +75,11 @@ Computadora.belongsTo(Conjunto, { foreignKey: "Conjunto_Computadoras" });
 Conjunto.hasMany(Fuente, { foreignKey: "Conjunto_Fuentes" });
 Fuente.belongsTo(Conjunto, { foreignKey: "Conjunto_Fuentes" });
 
-Conjunto.hasMany(Funda, { foreignKey: "Conjunto_Funda" });
-Funda.belongsTo(Conjunto, { foreignKey: "Conjunto_Funda" });
+Conjunto.hasMany(Funda, { foreignKey: "Conjunto_Fundas" });
+Funda.belongsTo(Conjunto, { foreignKey: "Conjunto_Fundas" });
 
-Conjunto.hasMany(Malla, { foreignKey: "Conjunto_Malla" });
-Malla.belongsTo(Conjunto, { foreignKey: "Conjunto_Malla" });
+Conjunto.hasMany(Malla, { foreignKey: "Conjunto_Mallas" });
+Malla.belongsTo(Conjunto, { foreignKey: "Conjunto_Mallas" });
 
 Conjunto.hasMany(Reloj, { foreignKey: "Conjunto_Relojes" });
 Reloj.belongsTo(Conjunto, { foreignKey: "Conjunto_Relojes" });

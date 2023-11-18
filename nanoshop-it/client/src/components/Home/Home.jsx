@@ -11,10 +11,10 @@ export default function Home() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getProductsAll());
+        dispatch(getConjuntosAll());
     }, [dispatch]);
     
-    const conjuntosALL = useSelector((state) => state.productos);
+    const conjuntosALL = useSelector((state) => state.conjuntos);
     return (
         <div className='home'>
             <div className='hr1'></div>

@@ -1,27 +1,35 @@
 const { Router } = require("express");
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs").promises;
+const sharp = require("sharp");
 
 const { Op, Modelos } = require("../db.js");
 const { Adaptador, Conjunto } = Modelos;
 
 const router = Router();
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public");
-  },
-  filename: (req, file, cb) => {
-    cb(
-      null,
-      file.fieldname + "_" + Date.now() + path.extname(file.originalname)
-    );
-  },
-});
-const upload = multer({ storage });
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 router.post("/", upload.array("file"), async (req, res, next) => {
   const { marca, modelo, tipo, estado, color, precio, cantidad, informacion } =
     req.body;
+
+  const arrayUbicacionesImagenes = [];
+  const imagenesProcesadas = await Promise.all(
+    req.files.map(async (file) => {
+      const imagenProcesadaBuffer = await sharp(file.buffer)
+        .resize({ width: 500, height: 500, fit: "cover" })
+        .rotate()
+        .toBuffer();
+      const nombreArchivo =
+        file.fieldname + "_" + Date.now() + path.extname(file.originalname);
+      arrayUbicacionesImagenes.push(nombreArchivo);
+      const rutaArchivo = path.join("public", nombreArchivo);
+      await fs.writeFile(rutaArchivo, imagenProcesadaBuffer);
+    })
+  );
+
   try {
     if (cantidad >= 2) {
       const conjunto = await Conjunto.create({
@@ -42,11 +50,9 @@ router.post("/", upload.array("file"), async (req, res, next) => {
           tipo: tipo,
           precio: precio,
           informacion: informacion,
-          imagenUbicacion:
-            typeof req.files === "object" &&
-            req.files.map((imagen) => {
-              return imagen.filename;
-            }),
+          imagenUbicacion: arrayUbicacionesImagenes.map((imagen) => {
+            return imagen;
+          }),
         });
         conjunto.addAdaptador(adaptadorNuevo);
       }
@@ -60,11 +66,9 @@ router.post("/", upload.array("file"), async (req, res, next) => {
         tipo: tipo,
         precio: precio,
         informacion: informacion,
-        imagenUbicacion:
-          typeof req.files === "object" &&
-          req.files.map((imagen) => {
-            return imagen.filename;
-          }),
+        imagenUbicacion: arrayUbicacionesImagenes.map((imagen) => {
+          return imagen;
+        }),
       });
       res.status(200).json({ adaptadorNuevo });
     }
@@ -77,6 +81,20 @@ router.put("/:id", upload.array("file"), async (req, res, next) => {
   const { id } = req.params;
   const { marca, modelo, tipo, estado, precio, informacion } = req.body;
 
+  const arrayUbicacionesImagenes = []; //Proceso las imagenes con sharp y almaceno los nombres en el Array
+  const imagenesProcesadas = await Promise.all(
+    req.files.map(async (file) => {
+      const imagenProcesadaBuffer = await sharp(file.buffer)
+        .resize({ width: 500, height: 500, fit: "cover" })
+        .rotate()
+        .toBuffer();
+      const nombreArchivo =
+        file.fieldname + "_" + Date.now() + path.extname(file.originalname);
+      arrayUbicacionesImagenes.push(nombreArchivo);
+      const rutaArchivo = path.join("public", nombreArchivo);
+      await fs.writeFile(rutaArchivo, imagenProcesadaBuffer);
+    })
+  );
   try {
     const adaptadorByIdDB = await Adaptador.findOne({ where: { id: id } });
     if (marca !== undefined) {
@@ -97,10 +115,10 @@ router.put("/:id", upload.array("file"), async (req, res, next) => {
     if (informacion !== undefined) {
       await adaptadorByIdDB.update({ informacion: informacion });
     }
-    if (typeof req.files !== undefined) {
+    if (arrayUbicacionesImagenes.length >= 1) {
       await adaptadorByIdDB.update({
-        imagenUbicacion: req.files.map((imagen) => {
-          return imagen.filename;
+        imagenUbicacion: arrayUbicacionesImagenes.map((imagen) => {
+          return imagen;
         }),
       });
     }

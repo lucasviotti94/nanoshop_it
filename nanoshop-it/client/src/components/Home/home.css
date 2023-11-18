@@ -10,7 +10,7 @@
 .titulo1Div{
   display: flex;    
   flex-direction: row;
-width: 1080px;
+width: 1240px;
 margin-top: 3vh;
 }
 
@@ -18,7 +18,7 @@ margin-top: 3vh;
   flex-grow: 1;
   border: 2.5px solid black;
   margin-top: 4vh;
-  width: 1080px;
+  width: 1240px;
 }
 
 .hr2{

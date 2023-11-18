@@ -1,23 +1,15 @@
 const { Router } = require("express");
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs").promises;
+const sharp = require("sharp");
 
 const { Op, Modelos } = require("../db.js"); //IMPORTAR MODELOS ACA
 const { Auricular, Conjunto } = Modelos;
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public");
-  },
-  filename: (req, file, cb) => {
-    cb(
-      null,
-      file.fieldname + "_" + Date.now() + path.extname(file.originalname)
-    );
-  },
-});
-const upload = multer({ storage });
 const router = Router();
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 router.post("/", upload.array("file"), async (req, res, next) => {
   const {
@@ -31,6 +23,21 @@ router.post("/", upload.array("file"), async (req, res, next) => {
     informacion,
     cantidad,
   } = req.body;
+
+  const arrayUbicacionesImagenes = []; //Proceso las imagenes con sharp y almaceno los nombres en el Array
+  const imagenesProcesadas = await Promise.all(
+    req.files.map(async (file) => {
+      const imagenProcesadaBuffer = await sharp(file.buffer)
+        .resize({ width: 500, height: 500, fit: "cover" })
+        .rotate()
+        .toBuffer();
+      const nombreArchivo =
+        file.fieldname + "_" + Date.now() + path.extname(file.originalname);
+      arrayUbicacionesImagenes.push(nombreArchivo);
+      const rutaArchivo = path.join("public", nombreArchivo);
+      await fs.writeFile(rutaArchivo, imagenProcesadaBuffer);
+    })
+  );
 
   try {
     if (cantidad >= 2) {
@@ -57,11 +64,9 @@ router.post("/", upload.array("file"), async (req, res, next) => {
           estado: estado,
           precio: precio,
           informacion: informacion,
-          imagenUbicacion:
-            typeof req.files === "object" &&
-            req.files.map((imagen) => {
-              return imagen.filename;
-            }),
+          imagenUbicacion: arrayUbicacionesImagenes.map((imagen) => {
+            return imagen;
+          }),
         });
         conjunto.addAuricular(auricularNuevo); // Relaciono la instancia Auricular con la instancia Conjunto creada
       }
@@ -76,11 +81,9 @@ router.post("/", upload.array("file"), async (req, res, next) => {
         estado: estado,
         precio: precio,
         informacion: informacion,
-        imagenUbicacion:
-          typeof req.files === "object" &&
-          req.files.map((imagen) => {
-            return imagen.filename;
-          }),
+        imagenUbicacion: arrayUbicacionesImagenes.map((imagen) => {
+          return imagen;
+        }),
       });
       res.status(200).json({ auricularNuevo });
     }
@@ -101,6 +104,22 @@ router.put("/:id", upload.array("file"), async (req, res, next) => {
     color,
     informacion,
   } = req.body;
+
+  const arrayUbicacionesImagenes = []; //Proceso las imagenes con sharp y almaceno los nombres en el Array
+  const imagenesProcesadas = await Promise.all(
+    req.files.map(async (file) => {
+      const imagenProcesadaBuffer = await sharp(file.buffer)
+        .resize({ width: 500, height: 500, fit: "cover" })
+        .rotate()
+        .toBuffer();
+      const nombreArchivo =
+        file.fieldname + "_" + Date.now() + path.extname(file.originalname);
+      arrayUbicacionesImagenes.push(nombreArchivo);
+      const rutaArchivo = path.join("public", nombreArchivo);
+      await fs.writeFile(rutaArchivo, imagenProcesadaBuffer);
+    })
+  );
+
   try {
     const auricularByIdDB = await Auricular.findOne({ where: { id: id } });
     if (typeof marca !== undefined) {
@@ -128,10 +147,10 @@ router.put("/:id", upload.array("file"), async (req, res, next) => {
     if (typeof informacion !== undefined) {
       await auricularByIdDB.update({ informacion: informacion });
     }
-    if (typeof req.files !== undefined) {
+    if (arrayUbicacionesImagenes.length >= 1) {
       await auricularByIdDB.update({
-        imagenUbicacion: req.files.map((imagen) => {
-          return imagen.filename;
+        imagenUbicacion: arrayUbicacionesImagenes.map((imagen) => {
+          return imagen;
         }),
       });
     }
