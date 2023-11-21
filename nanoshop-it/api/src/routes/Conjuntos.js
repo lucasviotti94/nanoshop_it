@@ -198,4 +198,13 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+router.post("/", async (req, res, next) => {
+  const objeto = req.body;
+  console.log(objeto);
+  try {
+  } catch (error) {
+    res.send("Error en la operacion: " + error.message).status(500);
+  }
+});
+
 module.exports = router;
