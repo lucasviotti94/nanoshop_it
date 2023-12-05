@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import axios from 'axios';
-
 import Button from '@mui/material/Button';
 
 const ProductosLabels = (prop) => {
@@ -117,7 +116,6 @@ const ProductosLabels = (prop) => {
                     'Content-Type': 'application/form-data',
                 },
             })
-              
 
         })
       } else {
@@ -293,5 +291,5 @@ const ProductosLabels = (prop) => {
     }
 
 }
-
 export default ProductosLabels;
+

@@ -8,72 +8,93 @@ const { Op, Modelos } = require("../db.js");
 const { Adaptador, Conjunto } = Modelos;
 
 const router = Router();
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const storage = multer.diskStorage({
+  destination: "public", // Directorio donde se guardarán las imágenes
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + "-" + uniqueSuffix + ext);
+  },
+});
 
-router.post("/", upload.array("file"), async (req, res, next) => {
-  const { marca, modelo, tipo, estado, color, precio, cantidad, informacion } =
-    req.body;
+const upload = multer({ storage });
 
-  const arrayUbicacionesImagenes = [];
-  const imagenesProcesadas = await Promise.all(
-    req.files.map(async (file) => {
-      const imagenProcesadaBuffer = await sharp(file.buffer)
-        .resize({ width: 500, height: 500, fit: "cover" })
-        .rotate()
-        .toBuffer();
-      const nombreArchivo =
-        file.fieldname + "_" + Date.now() + path.extname(file.originalname);
-      arrayUbicacionesImagenes.push(nombreArchivo);
-      const rutaArchivo = path.join("public", nombreArchivo);
-      await fs.writeFile(rutaArchivo, imagenProcesadaBuffer);
-    })
-  );
+router.post("/", upload.array("imagenes"), async (req, res, next) => {
+  const form = req.body;
+  if (form.conjunto === "Individual") {
+    try {
+      const imagenes = req.files;
+      const imagenesGuardadas = await Promise.all(
+        imagenes.map(async (imagen, i) => {
+          const imagenProcesadaBuffer = await sharp(imagen.path)
+            .resize({ width: 500, height: 500, fit: "cover" })
+            .rotate()
+            .toBuffer();
+          const nombreArchivo =
+            imagen.fieldname +
+            "_" +
+            Date.now() +
+            path.extname(imagen.originalname);
+          const rutaArchivo = path.join("public", nombreArchivo);
 
-  try {
-    if (cantidad >= 2) {
-      const conjunto = await Conjunto.create({
-        producto: "Adaptador",
-        marca: marca,
-        modelo: modelo,
-        cantidad: cantidad,
-        precio: precio,
-      });
-      var coloresArray = [...color.split(",")];
-      for (let i = 0; i < cantidad; i++) {
-        const coloriterado = coloresArray[i];
-        let adaptadorNuevo = await Adaptador.create({
-          marca: marca,
-          modelo: modelo,
-          estado: estado,
-          color: [coloriterado],
-          tipo: tipo,
-          precio: precio,
-          informacion: informacion,
-          imagenUbicacion: arrayUbicacionesImagenes.map((imagen) => {
-            return imagen;
-          }),
-        });
-        conjunto.addAdaptador(adaptadorNuevo);
-      }
-      res.status(200).json({ conjunto });
-    } else {
-      let adaptadorNuevo = await Adaptador.create({
-        marca: marca,
-        modelo: modelo,
-        estado: estado,
-        color: [color],
-        tipo: tipo,
-        precio: precio,
-        informacion: informacion,
-        imagenUbicacion: arrayUbicacionesImagenes.map((imagen) => {
+          await fs.writeFile(rutaArchivo, imagenProcesadaBuffer);
+          return rutaArchivo;
+        })
+      );
+
+      const adaptadorNuevo = await Adaptador.create({
+        marca: form.marca,
+        modelo: form.modelo,
+        tipo: form.tipo,
+        estado: form.estado,
+        precio: parseInt(form.precio),
+        informacion: form.informacion,
+        imagenUbicacion: imagenesGuardadas.map((imagen) => {
           return imagen;
         }),
       });
       res.status(200).json({ adaptadorNuevo });
+    } catch (error) {
+      res.status(500).send(error.message);
     }
-  } catch (error) {
-    res.send("Error en la operacion: " + error.message).status(500);
+  } else if (req.body.conjunto === "Conjunto") {
+    try {
+      const imagenes = req.files;
+      const imagenesGuardadas = await Promise.all(
+        imagenes.map(async (imagen, i) => {
+          const imagenProcesadaBuffer = await sharp(imagen.path)
+            .resize({ width: 500, height: 500, fit: "cover" })
+            .rotate()
+            .toBuffer();
+          const nombreArchivo =
+            imagen.fieldname +
+            "_" +
+            Date.now() +
+            path.extname(imagen.originalname);
+          await fs.writeFile("public/" + nombreArchivo, imagenProcesadaBuffer);
+          return nombreArchivo;
+        })
+      );
+      const adaptadorNuevo = await Adaptador.create({
+        marca: form.marca,
+        modelo: form.modelo,
+        tipo: form.tipo,
+        estado: form.estado,
+        precio: parseInt(form.precio),
+        informacion: form.informacion,
+        imagenUbicacion: imagenesGuardadas.map((imagen) => {
+          return imagen;
+        }),
+      });
+      const conjunto = await Conjunto.findByPk(form.idConjunto);
+      conjunto.addAdaptador(adaptadorNuevo);
+
+      res.status(200).json({ adaptadorNuevo });
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  } else {
+    res.status(500).send("No tiene Conjunto.");
   }
 });
 
