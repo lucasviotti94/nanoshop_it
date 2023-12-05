@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Outlet } from "react-router-dom";
 
 import NavBar from "./components/NavBar/Navbar";
 import Home from "./components/Home/Home";
@@ -9,14 +9,22 @@ import Dashboard from "./components/Dashboard/Dashboard";
 function App() {
   return (
       <>
-        <NavBar />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path={"/productos/:producto"} element={<Producto />} />
+          <Route 
+            path="/" 
+            element={
+              <div>
+                <NavBar />
+                <Outlet />
+                <Footer />
+              </div>
+            }>
+            <Route path="/" element={<Home />} />
+            <Route path={"/productos/:producto"} element={<Producto />} />
+          </Route>
           <Route path={"/dashboard"} element={<Dashboard />} />
           {/* <Route path={"/productos/:producto/:modelo"} element={<Modelo />} /> */}
         </Routes> 
-        <Footer />
       </>
 
   );

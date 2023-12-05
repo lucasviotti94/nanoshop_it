@@ -199,11 +199,21 @@ router.delete("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const objeto = req.body;
-  console.log(objeto);
+  const { producto, marca, modelo, cantidad, estado, precio } = req.body;
+
   try {
+    const conjuntoNuevo = await Conjunto.create({
+      producto: producto,
+      marca: marca,
+      modelo: modelo,
+      cantidad: cantidad,
+      estado: estado,
+      precio: precio,
+    });
+    res.status(200).json({ conjuntoNuevo });
   } catch (error) {
-    res.send("Error en la operacion: " + error.message).status(500);
+    console.log(error.message);
+    res.send("Error en la operacion.").status(500);
   }
 });
 
