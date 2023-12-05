@@ -1,135 +1,81 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-
+import { useState } from 'react';
+import imagenLogo from '../../images/NanoShopPaint.png'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import AgregarProductos from './AgregarProductos';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+// import imagenFondo from '../../images/Ciclon.jpg'
 const Formulario = () => {
-  const [nuevoObjeto, setNuevoObjeto] = useState({
-    marca: '',
-    modelo: '',
-    ficha: '',
-    inalambrico: false,
-    precio: '',
-    imagenes: [],
-  });
 
-  const [arrayDeObjetos, setArrayDeObjetos] = useState([]);
+    const [tarea, setTarea] = useState('')
+    const [hoveredAdd, setHoveredAdd] = useState(false);
+    const [hoveredDelete, setHoveredDelete] = useState(false);
+    // const [hoveredStadistics, setHoveredStadistics] = useState(false);
+    
+    const handleMouseEnter = (prop) => {
+        prop === 'Add' && setHoveredAdd(true);    
+        prop === 'Delete' && setHoveredDelete(true);    
+    };                
+    const handleMouseLeave = (prop) => {
+        prop === 'Add' && setHoveredAdd(false);
+        prop === 'Delete' && setHoveredDelete(false);
+    };
 
-  const handleChange = (event) => {
-    const { name, value, type, checked, files  } = event.target;
-
-    // Si el campo es de tipo checkbox, maneja el cambio de manera diferente
-    const valor = type === 'checkbox' ? checked : value;
-
-    setNuevoObjeto((prevObjeto) => ({
-      ...prevObjeto,
-      [name]: name === 'imagenes' ? Array.from(files) : valor,
-    }));
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    // Agrega el nuevo objeto al array
-    setArrayDeObjetos((prevArray) => [...prevArray, nuevoObjeto]);
-
-    try {
-        // Realiza la solicitud POST a localhost:3000/auriculares
-        const response = await axios.post('http://localhost:3000/auriculares', arrayDeObjetos);
-  
-        console.log('Respuesta del servidor:', response.data);
-  
-        // Reinicia el formulario y el array
-        setNuevoObjeto({
-          marca: '',
-          modelo: '',
-          ficha: '',
-          inalambrico: false,
-          precio: '',
-          imagenes: [],
-        });
-  
-        setArrayDeObjetos([]);
-      } catch (error) {
-        console.error('Error en la solicitud:', error);
-      }
-  };
+    const handleSetTarea = (prop) => {
+        prop === 'Add' && setTarea('AgregarProductos')
+        prop === 'Delete' && setTarea('EliminarProductos')
+    }
+    const handleResetTarea = () => {
+        setTarea('')
+    }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Marca:
-          <input
-            type="text"
-            name="marca"
-            value={nuevoObjeto.marca}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-
-        <label>
-          Modelo:
-          <input
-            type="text"
-            name="modelo"
-            value={nuevoObjeto.modelo}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-
-        <label>
-          Ficha:
-          <input
-            type="text"
-            name="ficha"
-            value={nuevoObjeto.ficha}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-
-        <label>
-          Inalámbrico:
-          <input
-            type="checkbox"
-            name="inalambrico"
-            checked={nuevoObjeto.inalambrico}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-
-        <label>
-          Precio:
-          <input
-            type="text"
-            name="precio"
-            value={nuevoObjeto.precio}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        
-        <label>
-        Imágenes:
-          <input
-            type="file"
-            name="imagenes"
-            // accept=".jpg, .jpeg" // Acepta solo archivos jpg o jpeg
-            multiple // Permite la selección múltiple de archivos
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-
-        <button type="submit">Agregar Objeto</button>
-      </form>
-
-      <hr />
-
-      <h2>Array de Objetos:</h2>
-      <pre>{JSON.stringify(arrayDeObjetos, null, 2)}</pre>
+    <div style={{
+        height: '100', 
+        backgroundColor: 'white'
+    }}>
+        <div style={{
+            display: 'flex', 
+            flexDirection: 'column', 
+            backgroundColor: 'pink ',
+            boxShadow: '4px 4px 0px 4px black',
+            width: '70px', 
+            height: '100%', 
+            position: 'absolute',
+            top: '0'
+            }}>
+            <img onClick={handleResetTarea} src={imagenLogo} style={{margin: '0.8vh', marginTop: '4vh',marginBottom: '4vh', marginRight: '15%', cursor: 'pointer'}}></img>
+            
+             <div 
+                style={{
+                    margin:'0 auto',
+                    scale: hoveredAdd === false ? '1' : '1.2',
+                    transition: '1s ease',
+                    cursor: 'pointer',
+                }}
+                onMouseEnter={() => handleMouseEnter('Add')}
+                onMouseLeave={() => handleMouseLeave('Add')}
+                onClick={() => handleSetTarea('Add')}
+                ><AddCircleOutlineIcon/></div>
+            <div
+                style={{
+                    margin:'0 auto',
+                    marginTop: '2vh',
+                    scale: hoveredDelete === false ? '1' : '1.2',
+                    transition: '1s ease',
+                    cursor: 'pointer'
+                }}
+                onMouseEnter={() => handleMouseEnter ('Delete')}
+                onMouseLeave={() => handleMouseLeave ('Delete')}
+                onClick={() => handleSetTarea('Delete')}
+            >
+                <HighlightOffIcon/>
+            </div>
+        </div>
+        <div style={{display: 'flex', justifyContent: 'center'}}>
+            {
+                tarea === 'AgregarProductos' && <AgregarProductos/>
+            }
+        </div>
     </div>
   );
 };
