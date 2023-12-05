@@ -13,7 +13,7 @@ function CardsHome(props) {
 
   useEffect(() => {
     const verificarTamanioPantalla = () => {
-      // Verifica si el ancho de la pantalla es menor o igual a 600px
+      //Verifica si el ancho de la pantalla es menor o igual a 600px
       const esPantallaGrande = window.matchMedia('(min-width: 1300px)').matches;
       setPantallaGrande(esPantallaGrande);
       const esPantallaMediana = window.matchMedia('(min-width: 1000px)').matches;
@@ -30,8 +30,8 @@ function CardsHome(props) {
     };
   }, []);
 
+  var arrayConjuntos = Object.values(props) //Para transformarlo en un Array de objetos
 
-  var arrayConjuntos = Object.values(props)
     return (   
       <div 
       style={{
@@ -42,8 +42,7 @@ function CardsHome(props) {
       }}>
         {
           arrayConjuntos.map((conjunto) => {
-            // const isProductInCart = checkProductInCart(conjunto)         
-
+            // const isProductInCart = checkProductInCart(conjunto)        
             return (
               <>
                 <CardTemplate {...conjunto}/>                
@@ -53,8 +52,7 @@ function CardsHome(props) {
         }
       </div>
       )
-      // <Row className="g-4" style={{ width: '1040px', marginTop: '4vh'}}>
-      // </Row>
+
 }
 
 export default CardsHome;

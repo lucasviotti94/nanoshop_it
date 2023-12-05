@@ -21,8 +21,23 @@ function CardModal( conjunto ) {
 
   const claves = Object.keys(conjunto);
   const claveArray = claves.find(clave => Array.isArray(conjunto[clave]));
-  const ubicacionImagenes = conjunto[claveArray][0].imagenUbicacion 
-  console.log('CONJUNTO DESDE MODEL: ',conjunto, ubicacionImagenes)
+  const ubicacionImagenes = conjunto[claveArray]
+  function getUbicaciones (conjunto) {
+    var arrayAdaptadores = []  
+    var arrayImagenes = []
+    var ubicacionesCorregidas = []
+
+    const claves = Object.keys(conjunto);
+    claves.map(clave =>  {
+      if (Array.isArray(conjunto[clave])) arrayAdaptadores = conjunto[clave]
+    })
+    var objeto = arrayAdaptadores.slice(0, 1)       
+    objeto.map(product => {
+      product.imagenUbicacion.map((r) => arrayImagenes.push(r))})
+
+    return arrayImagenes;   
+  }
+  const ubicacionesCorregidas = getUbicaciones(conjunto)
 
   return (
     <>
@@ -55,7 +70,7 @@ function CardModal( conjunto ) {
         }}
         > 
         <div style={{marginTop: '2vh'}}>
-          <ImagesCarousel {...ubicacionImagenes}/> 
+          <ImagesCarousel {...ubicacionesCorregidas}/> 
         </div>
         <form 
         style={{

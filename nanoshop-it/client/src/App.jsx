@@ -9,14 +9,16 @@ import Dashboard from "./components/Dashboard/Dashboard";
 function App() {
   return (
       <>
-        <NavBar />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path={"/productos/:producto"} element={<Producto />} />
-          <Route path={"/dashboard"} element={<Dashboard />} />
+          <div>
+            <NavBar />
+            <Route path="/" element={<Home />} />
+            <Route path={"/productos/:producto"} element={<Producto />} />
+            <Footer />
+          </div>
           {/* <Route path={"/productos/:producto/:modelo"} element={<Modelo />} /> */}
+          <Route path={"/dashboard"} element={<Dashboard />} />
         </Routes> 
-        <Footer />
       </>
 
   );
