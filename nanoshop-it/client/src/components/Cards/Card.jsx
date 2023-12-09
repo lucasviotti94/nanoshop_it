@@ -71,7 +71,7 @@ export default function CardTemplate (conjunto) {
             <Card.Title
               style={{
                 fontWeight: '800',
-                fontSize: '2.5vh'
+                fontSize: '1.5vh'
               }}
             > {conjunto?.modelo} 
             </Card.Title>

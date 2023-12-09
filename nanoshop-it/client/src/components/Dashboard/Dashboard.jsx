@@ -37,7 +37,7 @@ const Formulario = () => {
             display: 'flex', 
             flexDirection: 'column', 
             backgroundColor: 'pink ',
-            boxShadow: '4px 4px 0px 4px black',
+            boxShadow: '4px 4px 16px 2px gray',
             width: '70px', 
             height: '100%', 
             position: 'absolute',
