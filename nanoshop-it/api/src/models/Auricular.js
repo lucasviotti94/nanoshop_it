@@ -31,9 +31,8 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     color: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+      type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: ["Blanco"], //El error values.map popeaba aca porque no tenia el color Blanco encerrato en corchetes. (tiene sentido ya que es un array XD)
     },
     estado: {
       type: DataTypes.STRING,

@@ -21,27 +21,23 @@ const upload = multer({ storage });
 
 router.post("/", upload.array("imagenes"), async (req, res, next) => {
   const form = req.body;
+  const imagenes = req.files;
+  const imagenesGuardadas = await Promise.all(
+    imagenes.map(async (imagen, i) => {
+      const imagenProcesadaBuffer = await sharp(imagen.path)
+        .resize({ width: 500, height: 500, fit: "cover" })
+        .rotate()
+        .toBuffer();
+      const nombreArchivo =
+        imagen.fieldname + "_" + Date.now() + path.extname(imagen.originalname);
+      const rutaArchivo = path.join("public", nombreArchivo);
+
+      await fs.writeFile(rutaArchivo, imagenProcesadaBuffer);
+      return rutaArchivo;
+    })
+  );
   if (form.conjunto === "Individual") {
     try {
-      const imagenes = req.files;
-      const imagenesGuardadas = await Promise.all(
-        imagenes.map(async (imagen, i) => {
-          const imagenProcesadaBuffer = await sharp(imagen.path)
-            .resize({ width: 500, height: 500, fit: "cover" })
-            .rotate()
-            .toBuffer();
-          const nombreArchivo =
-            imagen.fieldname +
-            "_" +
-            Date.now() +
-            path.extname(imagen.originalname);
-          const rutaArchivo = path.join("public", nombreArchivo);
-
-          await fs.writeFile(rutaArchivo, imagenProcesadaBuffer);
-          return rutaArchivo;
-        })
-      );
-
       const adaptadorNuevo = await Adaptador.create({
         marca: form.marca,
         modelo: form.modelo,
@@ -57,24 +53,8 @@ router.post("/", upload.array("imagenes"), async (req, res, next) => {
     } catch (error) {
       res.status(500).send(error.message);
     }
-  } else if (req.body.conjunto === "Conjunto") {
+  } else if (form.conjunto === "Conjunto") {
     try {
-      const imagenes = req.files;
-      const imagenesGuardadas = await Promise.all(
-        imagenes.map(async (imagen, i) => {
-          const imagenProcesadaBuffer = await sharp(imagen.path)
-            .resize({ width: 500, height: 500, fit: "cover" })
-            .rotate()
-            .toBuffer();
-          const nombreArchivo =
-            imagen.fieldname +
-            "_" +
-            Date.now() +
-            path.extname(imagen.originalname);
-          await fs.writeFile("public/" + nombreArchivo, imagenProcesadaBuffer);
-          return nombreArchivo;
-        })
-      );
       const adaptadorNuevo = await Adaptador.create({
         marca: form.marca,
         modelo: form.modelo,
@@ -88,7 +68,6 @@ router.post("/", upload.array("imagenes"), async (req, res, next) => {
       });
       const conjunto = await Conjunto.findByPk(form.idConjunto);
       conjunto.addAdaptador(adaptadorNuevo);
-
       res.status(200).json({ adaptadorNuevo });
     } catch (error) {
       res.status(500).send(error.message);

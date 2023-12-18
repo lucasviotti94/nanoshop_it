@@ -200,8 +200,15 @@ router.delete("/:id", async (req, res) => {
 
 router.post("/", async (req, res, next) => {
   const objeto = req.body;
-  console.log(objeto);
   try {
+    const conjuntoNuevo = await Conjunto.create({
+      producto: objeto.producto,
+      marca: objeto.marca,
+      modelo: objeto.modelo,
+      cantidad: objeto.cantidad,
+      precio: parseInt(objeto.precio),
+    });
+    res.json({ conjuntoNuevo }).status(200);
   } catch (error) {
     res.send("Error en la operacion: " + error.message).status(500);
   }

@@ -13,14 +13,14 @@ module.exports = (sequelize) => {
       allowNull: true,
       defaultValue: "Fuente",
     },
-    modelo: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
     marca: {
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: "Apple",
+    },
+    modelo: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     tipo: {
       type: DataTypes.BOOLEAN,

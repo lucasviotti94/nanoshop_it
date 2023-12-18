@@ -8,89 +8,85 @@ const { Op, Modelos } = require("../db.js");
 const { Cable, Conjunto } = Modelos;
 
 const router = Router();
-const storage = multer.memoryStorage();
+const storage = multer.diskStorage({
+  destination: "public", // Directorio donde se guardarán las imágenes
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + "-" + uniqueSuffix + ext);
+  },
+});
+
 const upload = multer({ storage });
 
-router.post("/", upload.array("file"), async (req, res, next) => {
-  const {
-    marca,
-    modelo,
-    ficha,
-    largo,
-    precio,
-    estado,
-    cantidad,
-    color,
-    informacion,
-  } = req.body;
-
-  const arrayUbicacionesImagenes = [];
-  const imagenesProcesadas = await Promise.all(
-    req.files.map(async (file) => {
-      const imagenProcesadaBuffer = await sharp(file.buffer)
+router.post("/", upload.array("imagenes"), async (req, res, next) => {
+  const form = req.body;
+  const imagenes = req.files;
+  const imagenesGuardadas = await Promise.all(
+    imagenes.map(async (imagen, i) => {
+      const imagenProcesadaBuffer = await sharp(imagen.path)
         .resize({ width: 500, height: 500, fit: "cover" })
         .rotate()
         .toBuffer();
       const nombreArchivo =
-        file.fieldname + "_" + Date.now() + path.extname(file.originalname);
-      arrayUbicacionesImagenes.push(nombreArchivo);
+        imagen.fieldname + "_" + Date.now() + path.extname(imagen.originalname);
       const rutaArchivo = path.join("public", nombreArchivo);
+
       await fs.writeFile(rutaArchivo, imagenProcesadaBuffer);
+      return rutaArchivo;
     })
   );
-
-  try {
-    if (cantidad >= 2) {
-      const conjunto = await Conjunto.create({
-        producto: "Cable",
-        marca: marca,
-        modelo: modelo,
-        cantidad: cantidad,
-        precio: precio,
-      });
-
-      var coloresArray = [...color.split(",")];
-
-      for (let i = 0; i < cantidad; i++) {
-        const colorIterado = coloresArray[i];
-        let cableNuevo = await Cable.create({
-          marca: marca,
-          modelo: modelo,
-          ficha: ficha,
-          largo: largo,
-          color: coloresArray.length > 1 ? [colorIterado] : coloresArray,
-          estado: estado,
-          precio: precio,
-          informacion: informacion,
-          imagenUbicacion: arrayUbicacionesImagenes.map((imagen) => {
-            return imagen;
-          }),
-        });
-        conjunto.addCable(cableNuevo);
-      }
-      res.status(200).json({ conjunto });
-    } else {
-      let cableNuevo = await Cable.create({
-        marca: marca,
-        modelo: modelo,
-        ficha: ficha,
-        largo: largo,
-        color: [color],
-        estado: estado,
-        precio: precio,
-        informacion: informacion,
-        imagenUbicacion: arrayUbicacionesImagenes.map((imagen) => {
+  if (form.conjunto === "Individual") {
+    try {
+      const cableNuevo = await Cable.create({
+        marca: form.marca,
+        modelo: form.modelo,
+        ficha: form.ficha,
+        largo: form.largo,
+        color: form.color,
+        estado: form.estado,
+        precio: parseInt(form.precio),
+        informacion: form.informacion,
+        imagenUbicacion: imagenesGuardadas.map((imagen) => {
           return imagen;
         }),
       });
       res.status(200).json({ cableNuevo });
+    } catch (error) {
+      res.status(500).send(error.message);
+      console.log("error", error);
     }
-  } catch (error) {
-    res.send("Error en la operacion: " + error.message).status(500);
+  } else if (form.conjunto === "Conjunto") {
+    try {
+      try {
+        const cableNuevo = await Cable.create({
+          marca: form.marca,
+          modelo: form.modelo,
+          ficha: form.ficha,
+          largo: form.largo,
+          color: form.color,
+          estado: form.estado,
+          precio: parseInt(form.precio),
+          informacion: form.informacion,
+          imagenUbicacion: imagenesGuardadas.map((imagen) => {
+            return imagen;
+          }),
+        });
+        const conjunto = await Conjunto.findByPk(form.idConjunto);
+        await conjunto.addCable(cableNuevo);
+        res.status(200).json({ cableNuevo });
+      } catch (error) {
+        res.status(500).send(error.message);
+      }
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  } else {
+    res.status(500).send("No tiene Conjunto.");
   }
 });
 
-router.put("/:id", upload.array("file"), async (req, res, next) => {
+router.put("/:id", upload.array("imagenes"), async (req, res, next) => {
   const { id } = req.params;
   const { marca, modelo, ficha, largo, precio, estado, color, informacion } =
     req.body;
@@ -112,28 +108,28 @@ router.put("/:id", upload.array("file"), async (req, res, next) => {
 
   try {
     const cableByIdDB = await Cable.findOne({ where: { id: id } });
-    if (typeof marca !== undefined) {
+    if (marca !== undefined) {
       await cableByIdDB.update({ marca: marca });
     }
-    if (typeof modelo !== undefined) {
+    if (modelo !== undefined) {
       await cableByIdDB.update({ modelo: modelo });
     }
-    if (typeof ficha !== undefined) {
+    if (ficha !== undefined) {
       await cableByIdDB.update({ ficha: ficha });
     }
-    if (typeof largo !== undefined) {
+    if (largo !== undefined) {
       await cableByIdDB.update({ largo: largo });
     }
-    if (typeof color !== undefined) {
-      await cableByIdDB.update({ color: [color] });
+    if (color !== undefined) {
+      await cableByIdDB.update({ color: color });
     }
-    if (typeof estado !== undefined) {
+    if (estado !== undefined) {
       await cableByIdDB.update({ estado: estado });
     }
-    if (typeof precio !== undefined) {
+    if (precio !== undefined) {
       await cableByIdDB.update({ precio: precio });
     }
-    if (typeof informacion !== undefined) {
+    if (informacion !== undefined) {
       await cableByIdDB.update({ informacion: informacion });
     }
     if (arrayUbicacionesImagenes.length >= 1) {

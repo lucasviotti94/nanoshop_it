@@ -31,9 +31,8 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     color: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+      type: DataTypes.STRING,
       allowNull: true,
-      defaultValue: ["Blanco"],
     },
     estado: {
       type: DataTypes.STRING,

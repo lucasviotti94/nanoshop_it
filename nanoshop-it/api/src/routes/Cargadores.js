@@ -8,87 +8,78 @@ const { Op, Modelos } = require("../db.js");
 const { Cargador, Conjunto } = Modelos;
 
 const router = Router();
-const storage = multer.memoryStorage();
+const storage = multer.diskStorage({
+  destination: "public", // Directorio donde se guardarán las imágenes
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + "-" + uniqueSuffix + ext);
+  },
+});
 
 const upload = multer({ storage });
 
-router.post("/", upload.array("file"), async (req, res, next) => {
-  const {
-    marca,
-    modelo,
-    inalambrico,
-    color,
-    deAuto,
-    cantidad,
-    precio,
-    informacion,
-  } = req.body;
-
-  const arrayUbicacionesImagenes = [];
-  const imagenesProcesadas = await Promise.all(
-    req.files.map(async (file) => {
-      const imagenProcesadaBuffer = await sharp(file.buffer)
+router.post("/", upload.array("imagenes"), async (req, res, next) => {
+  const form = req.body;
+  const imagenes = req.files;
+  const imagenesGuardadas = await Promise.all(
+    imagenes.map(async (imagen, i) => {
+      const imagenProcesadaBuffer = await sharp(imagen.path)
         .resize({ width: 500, height: 500, fit: "cover" })
         .rotate()
         .toBuffer();
       const nombreArchivo =
-        file.fieldname + "_" + Date.now() + path.extname(file.originalname);
-      arrayUbicacionesImagenes.push(nombreArchivo);
+        imagen.fieldname + "_" + Date.now() + path.extname(imagen.originalname);
       const rutaArchivo = path.join("public", nombreArchivo);
+
       await fs.writeFile(rutaArchivo, imagenProcesadaBuffer);
+      return rutaArchivo;
     })
   );
-  try {
-    if (cantidad >= 2) {
-      const conjunto = await Conjunto.create({
-        producto: "Cargador",
-        marca: marca,
-        modelo: modelo,
-        cantidad: cantidad,
-        precio: precio,
-      });
-
-      var coloresArray = [...color.split(",")];
-
-      for (let i = 0; i < cantidad; i++) {
-        const colorIterado = coloresArray[i];
-
-        let cargadorNuevo = await Cargador.create({
-          marca: marca,
-          modelo: modelo,
-          inalambrico: inalambrico,
-          color: coloresArray.length > 1 ? [colorIterado] : coloresArray,
-          deAuto: deAuto,
-          precio: precio,
-          informacion: informacion,
-          imagenUbicacion: arrayUbicacionesImagenes.map((imagen) => {
-            return imagen;
-          }),
-        });
-        conjunto.addCargador(cargadorNuevo);
-      }
-      res.status(200).json({ conjunto });
-    } else {
-      let cargadorNuevo = await Cargador.create({
-        marca: marca,
-        modelo: modelo,
-        inalambrico: inalambrico,
-        color: [color],
-        deAuto: deAuto,
-        precio: precio,
-        informacion: informacion,
-        imagenUbicacion: arrayUbicacionesImagenes.map((imagen) => {
+  if (form.conjunto === "Individual") {
+    try {
+      const cargadorNuevo = await Cargador.create({
+        marca: form.marca,
+        modelo: form.modelo,
+        inalambrico: form.inalambrico === "true" ? true : false,
+        deAuto: form.deAuto,
+        estado: form.estado,
+        precio: parseInt(form.precio),
+        informacion: form.informacion,
+        imagenUbicacion: imagenesGuardadas.map((imagen) => {
           return imagen;
         }),
       });
       res.status(200).json({ cargadorNuevo });
+    } catch (error) {
+      res.status(500).send(error.message);
     }
-  } catch (error) {
-    res.send("Error en la operacion: " + error.message).status(500);
+  } else if (form.conjunto === "Conjunto") {
+    try {
+      const cargadorNuevo = await Cargador.create({
+        marca: form.marca,
+        modelo: form.modelo,
+        inalambrico: form.inalambrico === "true" ? true : false,
+        deAuto: form.deAuto,
+        estado: form.estado,
+        precio: parseInt(form.precio),
+        informacion: form.informacion,
+        imagenUbicacion: imagenesGuardadas.map((imagen) => {
+          return imagen;
+        }),
+      });
+      const conjunto = await Conjunto.findByPk(form.idConjunto);
+      conjunto.addCargador(cargadorNuevo);
+      res.status(200).json({ cargadorNuevo });
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  } else {
+    res.status(500).send("No tiene Conjunto.");
   }
 });
 
-router.put("/:id", upload.array("file"), async (req, res, next) => {
+router.put("/:id", upload.array("imagenes"), async (req, res, next) => {
   const { id } = req.params;
   const { marca, modelo, inalambrico, deAuto, estado, precio, informacion } =
     req.body;
@@ -111,25 +102,25 @@ router.put("/:id", upload.array("file"), async (req, res, next) => {
   try {
     const cargadorByIdDB = await Cargador.findOne({ where: { id: id } });
 
-    if (typeof marca !== undefined) {
+    if (marca !== undefined) {
       await cargadorByIdDB.update({ marca: marca });
     }
-    if (typeof modelo !== undefined) {
+    if (modelo !== undefined) {
       await cargadorByIdDB.update({ modelo: modelo });
     }
-    if (typeof inalambrico !== undefined) {
+    if (inalambrico !== undefined) {
       await cargadorByIdDB.update({ inalambrico: inalambrico });
     }
-    if (typeof deAuto !== undefined) {
+    if (deAuto !== undefined) {
       await cargadorByIdDB.update({ deAuto: deAuto });
     }
-    if (typeof estado !== undefined) {
+    if (estado !== undefined) {
       await cargadorByIdDB.update({ estado: estado });
     }
-    if (typeof precio !== undefined) {
+    if (precio !== undefined) {
       await cargadorByIdDB.update({ precio: precio });
     }
-    if (typeof informacion !== undefined) {
+    if (informacion !== undefined) {
       await cargadorByIdDB.update({ informacion: informacion });
     }
     if (arrayUbicacionesImagenes.length >= 1) {

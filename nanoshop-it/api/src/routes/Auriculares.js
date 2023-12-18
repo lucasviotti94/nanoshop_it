@@ -4,95 +4,88 @@ const path = require("path");
 const fs = require("fs").promises;
 const sharp = require("sharp");
 
-const { Op, Modelos } = require("../db.js"); //IMPORTAR MODELOS ACA
+const { Op, Modelos } = require("../db.js");
 const { Auricular, Conjunto } = Modelos;
 
 const router = Router();
-const storage = multer.memoryStorage();
+const storage = multer.diskStorage({
+  destination: "public", // Directorio donde se guardarán las imágenes
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + "-" + uniqueSuffix + ext);
+  },
+});
+
 const upload = multer({ storage });
 
-router.post("/", upload.array("file"), async (req, res, next) => {
-  const {
-    marca,
-    modelo,
-    ficha,
-    inalambrico,
-    precio,
-    estado,
-    color,
-    informacion,
-    cantidad,
-  } = req.body;
-
-  const arrayUbicacionesImagenes = []; //Proceso las imagenes con sharp y almaceno los nombres en el Array
-  const imagenesProcesadas = await Promise.all(
-    req.files.map(async (file) => {
-      const imagenProcesadaBuffer = await sharp(file.buffer)
+router.post("/", upload.array("imagenes"), async (req, res, next) => {
+  const form = req.body;
+  const imagenes = req.files;
+  const imagenesGuardadas = await Promise.all(
+    imagenes.map(async (imagen, i) => {
+      const imagenProcesadaBuffer = await sharp(imagen.path)
         .resize({ width: 500, height: 500, fit: "cover" })
         .rotate()
         .toBuffer();
       const nombreArchivo =
-        file.fieldname + "_" + Date.now() + path.extname(file.originalname);
-      arrayUbicacionesImagenes.push(nombreArchivo);
+        imagen.fieldname + "_" + Date.now() + path.extname(imagen.originalname);
       const rutaArchivo = path.join("public", nombreArchivo);
+
       await fs.writeFile(rutaArchivo, imagenProcesadaBuffer);
+      return rutaArchivo;
     })
   );
-
-  try {
-    if (cantidad >= 2) {
-      //dependiendo la prop cantidad creo 1 o varias instancias y las relaciono con el modelo conjunto en el caso multiple
-      const conjunto = await Conjunto.create({
-        producto: "Auricular",
-        marca: marca,
-        modelo: modelo,
-        estado: estado,
-        cantidad: cantidad,
-        precio: precio,
-      });
-
-      var coloresArray = [...color.split(",")]; //Lo recibo como un string, entonce los separo para manejar un array
-
-      for (let i = 0; i < cantidad; i++) {
-        const colorIterado = coloresArray[i]; //Itero los colores para crear cada auricular con su respectivo color
-        var auricularNuevo = await Auricular.create({
-          marca: marca,
-          modelo: modelo,
-          ficha: ficha,
-          inalambrico: inalambrico,
-          color: coloresArray.length > 1 ? [colorIterado] : coloresArray,
-          estado: estado,
-          precio: precio,
-          informacion: informacion,
-          imagenUbicacion: arrayUbicacionesImagenes.map((imagen) => {
-            return imagen;
-          }),
-        });
-        conjunto.addAuricular(auricularNuevo); // Relaciono la instancia Auricular con la instancia Conjunto creada
-      }
-      res.status(200).json({ conjunto });
-    } else {
-      let auricularNuevo = await Auricular.create({
-        marca: marca,
-        modelo: modelo,
-        ficha: ficha,
-        inalambrico: inalambrico,
-        color: [color],
-        estado: estado,
-        precio: precio,
-        informacion: informacion,
-        imagenUbicacion: arrayUbicacionesImagenes.map((imagen) => {
+  if (form.conjunto === "Individual") {
+    try {
+      console.log("entre al individual", form);
+      const auricularNuevo = await Auricular.create({
+        marca: form.marca,
+        modelo: form.modelo,
+        inalambrico: form.inalambrico === "true" ? true : false,
+        color: form.color,
+        estado: form.estado,
+        precio: parseInt(form.precio),
+        informacion: form.informacion,
+        imagenUbicacion: imagenesGuardadas.map((imagen) => {
           return imagen;
         }),
       });
       res.status(200).json({ auricularNuevo });
+    } catch (error) {
+      res.status(500).send(error.message);
+      console.log("error", error);
     }
-  } catch (error) {
-    res.send("Error en la operacion: " + error.message).status(500);
+  } else if (form.conjunto === "Conjunto") {
+    try {
+      try {
+        const auricularNuevo = await Auricular.create({
+          marca: form.marca,
+          modelo: form.modelo,
+          inalambrico: form.inalambrico === "true" ? true : false,
+          color: form.color,
+          estado: form.estado,
+          precio: parseInt(form.precio),
+          informacion: form.informacion,
+          imagenUbicacion: imagenesGuardadas.map((imagen) => {
+            return imagen;
+          }),
+        });
+        const conjunto = await Conjunto.findByPk(form.idConjunto);
+        await conjunto.addAuricular(auricularNuevo);
+        res.status(200).json({ auricularNuevo });
+      } catch (error) {
+        res.status(500).send(error.message);
+      }
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  } else {
+    res.status(500).send("No tiene Conjunto.");
   }
 });
 
-router.put("/:id", upload.array("file"), async (req, res, next) => {
+router.put("/:id", upload.array("imagenes"), async (req, res, next) => {
   const { id } = req.params;
   const {
     marca,
@@ -122,29 +115,28 @@ router.put("/:id", upload.array("file"), async (req, res, next) => {
 
   try {
     const auricularByIdDB = await Auricular.findOne({ where: { id: id } });
-    if (typeof marca !== undefined) {
+    if (marca !== undefined) {
       await auricularByIdDB.update({ marca: marca });
     }
-    if (typeof modelo !== undefined) {
+    if (modelo !== undefined) {
       await auricularByIdDB.update({ modelo: modelo });
     }
-    if (typeof ficha !== undefined) {
+    if (ficha !== undefined) {
       await auricularByIdDB.update({ ficha: ficha });
     }
-    if (typeof inalambrico !== undefined) {
+    if (inalambrico !== undefined) {
       await auricularByIdDB.update({ inalambrico: inalambrico });
     }
-    if (typeof color !== undefined) {
-      //undefined porque puede pasarmelo como string o como array dependiendo la esctructura de la peticion
+    if (color !== undefined) {
       await auricularByIdDB.update({ color: [color] });
     }
-    if (typeof estado !== undefined) {
+    if (estado !== undefined) {
       await auricularByIdDB.update({ estado: estado });
     }
-    if (typeof precio !== undefined) {
+    if (precio !== undefined) {
       await auricularByIdDB.update({ precio: precio });
     }
-    if (typeof informacion !== undefined) {
+    if (informacion !== undefined) {
       await auricularByIdDB.update({ informacion: informacion });
     }
     if (arrayUbicacionesImagenes.length >= 1) {
@@ -163,8 +155,7 @@ router.put("/:id", upload.array("file"), async (req, res, next) => {
 router.get("/", async (req, res) => {
   try {
     let auricularesDB = await Auricular.findAll({});
-
-    res.json({ auricularesDB }).status(200);
+    res.status(200).json({ auricularesDB });
   } catch (error) {
     res.send("Error en la operacion: " + error.message).status(500);
   }
